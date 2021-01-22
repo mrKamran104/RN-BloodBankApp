@@ -24,7 +24,6 @@ import HomeScreen from '../../screens/HomeScreen';
 import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
 import AboutScreen from './../../screens/AboutScreen';
-import LoginScreen from './../../screens/LoginScreen/index';
 
 const Stack = createStackNavigator();
 

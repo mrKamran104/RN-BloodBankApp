@@ -6,17 +6,22 @@ import {View, StatusBar} from 'react-native';
 import {DrawerAnimationProvider} from '../../contexts/DrawerAnimationContext';
 import { connect } from 'react-redux';
 import LoginScreen from '../../screens/LoginScreen';
+import AppStackNavigator from './../../routers/AppStackNavigator/index';
+import StartRouter from './../../routers/AppStackNavigator/StartRouter';
 
 function App(props) {
   return (
     <>
-    <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
-    {!props.login? <LoginScreen /> :
+    {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
+    {/* <AppStackNavigator> */}
+
+    {!props.login? <StartRouter/> :
     <DrawerAnimationProvider>
       <NavigationContainer>
         <AppDrawerNavigator />
       </NavigationContainer>
     </DrawerAnimationProvider>}
+      {/* </AppStackNavigator> */}
     </>
   );
 }
