@@ -8,6 +8,7 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
 import CustomDrawerItem from '../../components/CustomDrawerItem';
+import AboutScreen from './../../screens/AboutScreen/index';
 const Drawer = createDrawerNavigator();
 
 const AppDrawerNavigator = () => {
@@ -82,7 +83,7 @@ const AppDrawerNavigator = () => {
             width: '65%',
             // overflow: 'visible',
             backgroundColor: 'transparent',
-            marginRight: -30,
+            marginRight: -80,
           }}
           sceneContainerStyle={{
             backgroundColor: 'transparent',
@@ -105,37 +106,7 @@ const AppDrawerNavigator = () => {
         </Drawer.Navigator>
       </View>
 
-      <SafeAreaView
-        style={{ position: 'absolute', zIndex: 2, bottom: 0, left: 0 }}>
-        <Animated.View
-          style={{
-            opacity: opacity,
-            flexDirection: 'row',
-            alignItems: 'center',
-            transform: [{ translateX: translateX }],
-          }}>
-          <CustomDrawerItem
-            title={`Settings    |    Log Out`}
-            icon={{ name: 'settings-sharp', type: 'Ionicons' }}
-          />
-          {/* <View
-            style={{
-              height: 40,
-              width: 40,
-              borderRadius: 20,
-              backgroundColor: 'grey',
-              margin: 12,
-            }}
-          /> */}
-          {/* <Text style={{ color: 'blue' }}>
-            Settings | Log Out ................. ........
-          </Text>
-					<CustomDrawerItem
-          title="Home"
-          icon={{ name: 'settings-sharp', type: 'Ionicons' }}
-        /> */}
-        </Animated.View>
-      </SafeAreaView>
+      
     </>
   );
 };

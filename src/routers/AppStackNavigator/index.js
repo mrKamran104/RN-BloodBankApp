@@ -12,22 +12,24 @@
           style={{
     borderRadius: this.state.borderRadius,
 */
-// import { Text, View } from 'react-native';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, View, Button } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import * as React from 'react';
-
+import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import DetailsScreen from '../../screens/DetailsScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
-import AboutScreen from './../../screens/AboutScreen/index';
+import AboutScreen from './../../screens/AboutScreen';
+import LoginScreen from './../../screens/LoginScreen/index';
 
 const Stack = createStackNavigator();
 
 const AppStackNavigator = (props) => {
+  const { navigation } = props;
   const { progress } = React.useContext(DrawerAnimationContext);
 
   const scale = Animated.interpolate(progress, {
@@ -60,8 +62,11 @@ const AppStackNavigator = (props) => {
     outputRange: [0, 0, 0.4],
   });
 
+  console.log("jj", props.login)
+
   return (
-    <Animated.View
+    <>
+     <Animated.View
       style={{
         flex: 1,
         justifyContent: 'center',
@@ -104,18 +109,23 @@ const AppStackNavigator = (props) => {
           borderRadius: borderRadius,
           overflow: 'hidden',
         }}>
+         
         <Stack.Navigator
           screenOptions={{
-            // headerLeft: () => (
-            //   <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            //     <Text>Toggle</Text>
-            //   </TouchableOpacity>
-            // ),
-            header: () => null,
+            headerLeft: () => (
+              <Button onPress={() => navigation.openDrawer()} title="kk" color="black"/>
+              // <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              //   <Text>Toggle</Text>
+              // </TouchableOpacity>
+            ),
+            // header: () => null,
           }}>
+
+
           <Stack.Screen
             name="Home"
             component={HomeScreen}
+            // options={({ login }) => ({ login: route.params.login })}
             // options={
             //   {
             //      header: (props) => {
@@ -130,6 +140,7 @@ const AppStackNavigator = (props) => {
         </Stack.Navigator>
       </Animated.View>
     </Animated.View>
+    </>
   );
 };
 

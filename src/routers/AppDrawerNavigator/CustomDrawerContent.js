@@ -5,15 +5,23 @@ import {
   DrawerItemList,
   // DrawerItemList,
 } from '@react-navigation/drawer';
-import { Text, View } from 'react-native';
+import { Text, View, SafeAreaView } from 'react-native';
 import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
 import CustomDrawerItem from '../../components/CustomDrawerItem';
+import { connect } from 'react-redux';
+import { Login } from '../../store/action';
+import LoginScreen from './../../screens/LoginScreen/index';
 
 const CustomDrawerContent = (props) => {
   const { progress, navigation } = props;
 
   const { setProgress } = useContext(DrawerAnimationContext);
+
+  const translateX = Animated.interpolate(progress, {
+    inputRange: [0, 1],
+    outputRange: [-200, 0],
+  });
 
   useEffect(() => {
     progress && setProgress(progress);
@@ -70,6 +78,8 @@ const CustomDrawerContent = (props) => {
           title="Home"
           icon={{ name: 'settings-sharp', type: 'Ionicons' }}
         /> */}
+
+
       </Animated.View>
 
       {/* <DrawerItem
@@ -124,8 +134,55 @@ const CustomDrawerContent = (props) => {
       /> */}
 
       <View style={{ flexGrow: 1 }} />
+      <SafeAreaView
+        style={{ position: 'absolute', zIndex: 2, bottom: 0, left: 0 }}>
+        <Animated.View
+          style={{
+            opacity: opacity,
+            flexDirection: 'row',
+            alignItems: 'center',
+            transform: [{ translateX: translateX }],
+          }}>
+          <CustomDrawerItem
+            title={`Log Out`}
+            icon={{ name: 'settings-sharp', type: 'Ionicons' }}
+            onPress={()=> props.Login(false)}
+          />
+          
+          
+          {/* <View
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              backgroundColor: 'grey',
+              margin: 12,
+            }}
+          /> */}
+          {/* <Text style={{ color: 'blue' }}>
+            Settings | Log Out ................. ........
+          </Text>
+					<CustomDrawerItem
+          title="Home"
+          icon={{ name: 'settings-sharp', type: 'Ionicons' }}
+        /> */}
+        </Animated.View>
+      </SafeAreaView>
     </DrawerContentScrollView>
   );
 };
 
-export default CustomDrawerContent;
+
+function mapStateToProp(state) {
+  return ({
+      login: state.root.login
+  })
+}
+function mapDispatchToProp(dispatch) {
+  return ({
+      Login: (data) => { dispatch(Login(data)) }
+  })
+}
+
+export default connect(mapStateToProp, mapDispatchToProp)(CustomDrawerContent);
+// export default CustomDrawerContent;

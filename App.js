@@ -8,18 +8,25 @@
 
 import React from 'react';
 import App from './src/containers/App';
-import { DrawerAnimationProvider } from './src/contexts/DrawerAnimationContext';
+import { Provider } from 'react-redux';
+import store  from './src/store';
 
-const app: () => React$Node = () => {
+
+
+
+const app: () => React$Node = (props) => {
   return (
-    <DrawerAnimationProvider>
+    <>
+    <Provider store={store}> 
       <App />
-    </DrawerAnimationProvider>
+      </Provider>
+    </>
   );
 };
 
-export default app;
 
+
+export default app;
 
 // import React from 'react';
 // import {
@@ -32,8 +39,8 @@ export default app;
 // } from 'react-native';
 
 // import {
-//   Header,
-//   LearnMoreLinks,
+// import store from './src/store/index';
+// import LoginScreen from './src/screens/LoginScreen/index';
 //   Colors,
 //   DebugInstructions,
 //   ReloadInstructions,
