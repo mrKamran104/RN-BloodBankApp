@@ -7,9 +7,12 @@ import {
   Alert,
   Switch,
   ImageBackground,
+  Image,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
+// import ImagePicker from 'react-native-image-crop-picker';
+import { openCamera, openCrop } from "../../utils/SelectImage";
 import {Login} from '../../store/action';
 import {
   Container,
@@ -24,24 +27,35 @@ import {
   Button,
   Radio,
 } from 'native-base';
+import demo from "../../assets/demo.png";
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 function Signup(props) {
+
+  const ImageUri = Image.resolveAssetSource(demo).uri
+
   // const [login, setLogin] = useState(false)
   const {navigation} = props;
   const [userName, setUserName] = useState('');
   const [userPass, setUserPass] = useState('');
-  const [error, setError] = useState('');
+  const [genderRadio, setGenderRadio] = useState(true);
+  const [userAddress, setUserAddress] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [passError, setPassError] = useState(false);
+  const [resourcePath, setResourcePath] = useState(ImageUri);
 
   const signupwithEmail = () => {
-    if (userName === '' || userPass === '') {
-      // setError('Fields are required');
-      createTwoButtonAlert();
-      return;
-    }
-    console.log('Signup Email');
+    // if (userName === '' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
+    //   // setError('Fields are required');
+    //   createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
+    //   return;
+    // }
+    createTwoButtonAlert('Hurry', 'You are successfully signup,\n Click "Ok" to go Login screen', ()=> navigation.navigate('Signin', {params: {userName: userName}}));
+    // console.log('Signup Email');
     // props.Login(true);
   };
+
   const RadioButton = (props) => {
     return (
       <View
@@ -73,11 +87,40 @@ function Signup(props) {
       </View>
     );
   };
+  const matchConfirmPassword = (val) => {
+    setConfirmPass(val);
+    if (userPass !== val) {
+      setPassError(true);
+    } else {
+      setPassError(false);
+    }
+  };
+  const matchPassword = (val) => {
+    setUserPass(val);
+    if (confirmPass !== val) {
+      setPassError(true);
+    } else {
+      setPassError(false);
+    }
+  };
 
-  const createTwoButtonAlert = () =>
+//   const openCamera = () => {
+//     ImagePicker.openPicker({
+//         // width: 300,
+//         // height: 400,
+//         // cropping: true,
+//         mediaType: 'any',
+        
+//     }).then(image => {
+//         console.log(image);
+//         setResourcePath(image.path);
+//     });
+// }
+
+  const createTwoButtonAlert = (title, msg, func) =>
     Alert.alert(
-      `Error!!!`,
-      `All Fields are required`,
+      title,
+      msg,
       [
         ,
         // {
@@ -85,7 +128,7 @@ function Signup(props) {
         //   onPress: () => console.log("Cancel Pressed"),
         //   style: "cancel"
         // },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: 'OK', onPress: func},
       ],
       {cancelable: false},
     );
@@ -99,7 +142,7 @@ function Signup(props) {
         backgroundColor: 'white',
       }}>
       <View style={{}}>
-        <Text style={styles.text}>SignUp Screen</Text>
+        <Text style={styles.text}>Signup Screen</Text>
         <Button
           style={styles.backButton}
           onPress={() => navigation.goBack()}
@@ -110,6 +153,14 @@ function Signup(props) {
         </Button>
       </View>
 
+      <View >
+        <TouchableOpacity 
+          onPress={async()=> { let d = await openCamera(); setResourcePath(d)} }>
+          <Image source={{ uri: resourcePath }} style={{ height: 150, width: 150, resizeMode: 'cover', alignSelf: 'center' }} />
+          {/* <Text style={styles.buttonText}>Select File</Text> */}
+        </TouchableOpacity>
+      </View>
+
       {/* <View> */}
       <View style={styles.container}>
         <Form>
@@ -118,26 +169,40 @@ function Signup(props) {
             <Input value={userName} onChangeText={(val) => setUserName(val)} />
           </Item>
 
-          <Text style={{marginStart: 20, fontSize: 16, marginTop: 10}}>Gender</Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 80, marginTop: 10}}>
-            <TouchableOpacity  selected={false} style={{flexDirection: 'row'}}>
-            {RadioButton({selected: true, style: {borderColor: 'green'}, innerStyle: {backgroundColor: 'green'}})}
-              {/* <Radio
-                color={'#f0ad4e'}
-                selectedColor={'#5cb85c'}
-                selected={false}
-              /> */}
-              <Text style={{paddingLeft: 10, textAlignVertical: 'center'}}>Male</Text>
-            </TouchableOpacity >
-            <TouchableOpacity style={{flexDirection: 'row'}}>
-            {RadioButton({selected: false, style: {borderColor: 'green'}, innerStyle: {backgroundColor: 'green'}})}
-              {/* <Radio
-                color={'#f0ad4e'}
-                selectedColor={'#5cb85c'}
-                selected={true}
-              /> */}
-              <Text style={{paddingLeft: 10, textAlignVertical: 'center'}}>Female</Text>
-            </TouchableOpacity >
+          <Text style={{marginStart: 20, fontSize: 16, marginTop: 10}}>
+            Gender
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginHorizontal: 80,
+              marginTop: 10,
+            }}>
+            <TouchableOpacity
+              style={{flexDirection: 'row'}}
+              onPress={() => setGenderRadio(true)}>
+              {RadioButton({
+                selected: genderRadio,
+                style: {borderColor: 'green'},
+                innerStyle: {backgroundColor: 'green'},
+              })}
+              <Text style={{paddingLeft: 10, textAlignVertical: 'center'}}>
+                Male
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{flexDirection: 'row'}}
+              onPress={() => setGenderRadio(false)}>
+              {RadioButton({
+                selected: !genderRadio,
+                style: {borderColor: 'green'},
+                innerStyle: {backgroundColor: 'green'},
+              })}
+              <Text style={{paddingLeft: 10, textAlignVertical: 'center'}}>
+                Female
+              </Text>
+            </TouchableOpacity>
           </View>
           {/* <ListItem>
             <Left>
@@ -158,22 +223,36 @@ function Signup(props) {
           <Item floatingLabel>
             <Label>Email</Label>
             <Input
-              value={userPass}
-              autoCompleteType="email"
-              onChangeText={(val) => setUserPass(val)}
+              value={userEmail}
+              // autoCompleteType="email"
+              onChangeText={(val) => setUserEmail(val)}
             />
           </Item>
           <Item floatingLabel>
             <Label>Address</Label>
-            <Input value={userPass} onChangeText={(val) => setUserPass(val)} />
+            <Input
+              value={userAddress}
+              onChangeText={(val) => setUserAddress(val)}
+            />
           </Item>
           <Item floatingLabel>
             <Label>Password</Label>
-            <Input value={userPass} onChangeText={(val) => setUserPass(val)} />
+            <Input
+              value={userPass}
+              onChangeText={(val) => matchPassword(val)}
+            />
           </Item>
-          <Item floatingLabel>
+          <Item
+            floatingLabel
+            error={confirmPass === '' ? false : passError ? true : false}
+            // success={!passError? userPass===''?false: true : false}
+            disabled={userPass === '' ? true : false}>
             <Label>Confirm Password</Label>
-            <Input value={userPass} onChangeText={(val) => setUserPass(val)} />
+            <Input
+              disabled={userPass === '' ? true : false}
+              value={confirmPass}
+              onChangeText={(val) => matchConfirmPassword(val)}
+            />
           </Item>
           {/* {error && (
             <Alert severity="error" onClick={() => setError(null)}>
@@ -197,7 +276,7 @@ function Signup(props) {
       <View style={styles.container2}>
         <Button style={styles.signup} onPress={signupwithEmail} iconLeft block>
           {/* <Icon name='home' /> */}
-          <Text style={{color: 'white'}}>Signin with Email</Text>
+          <Text style={{color: 'white'}}>Signup with Email</Text>
         </Button>
       </View>
       {/* </View> */}
@@ -235,11 +314,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'white',
     paddingTop: 25,
     paddingBottom: 30,
-    position: 'absolute',
-    zIndex: 2,
-    left: 0,
-    bottom: 0,
-    flex: 0.3,
+    // position: 'absolute',
+    // zIndex: 2,
+    // left: 0,
+    // bottom: 0,
+    // flex: 0.3,
     // flex: 0.3,
     // borderWidth: 5,
     // borderTopLeftRadius: 20,

@@ -12,9 +12,11 @@
           style={{
     borderRadius: this.state.borderRadius,
 */
-import { Text, View, Button } from 'react-native';
+import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import {
+  Button,
+} from 'native-base';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -112,7 +114,7 @@ const AppStackNavigator = (props) => {
         <Stack.Navigator
           screenOptions={{
             headerLeft: () => (
-              <Button onPress={() => navigation.openDrawer()} title="kk" color="black"/>
+              <Button onPress={() => navigation.openDrawer()} transparent style={{position:'absolute',top: 5,left: 15,}}><Text style={{color: 'black'}}>open</Text></Button>
               // <TouchableOpacity onPress={() => navigation.openDrawer()}>
               //   <Text>Toggle</Text>
               // </TouchableOpacity>

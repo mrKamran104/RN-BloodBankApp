@@ -28,11 +28,17 @@ const image = {uri: 'https://reactjs.org/logo-og.png'};
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 function LoginScreen(props) {
   // const [login, setLogin] = useState(false)
-  const {navigation} = props;
+  const {navigation, route} = props;
+  
   const [userName, setUserName] = useState('');
   const [userPass, setUserPass] = useState('');
   const [error, setError] = useState('');
   const [hidePass, setHidePass] = useState(true);
+
+if(route.params != undefined && userName !== route.params.params.userName ){
+
+   setUserName(route.params.params.userName)
+}
 
   const signinwithEmail = () => {
     if (userName === '' || userPass === '') {
@@ -160,7 +166,7 @@ function LoginScreen(props) {
             iconLeft
             block>
             {/* <Icon name='home' /> */}
-            <Text style={{color: 'white'}}>Signup with Gmail</Text>
+            <Text style={{color: 'white'}}>Signin with Gmail</Text>
           </Button>
           <Button
             style={{marginTop: 20, marginEnd: 30, marginStart: 30}}
@@ -168,7 +174,7 @@ function LoginScreen(props) {
             iconLeft
             block>
             {/* <Icon name='home' /> */}
-            <Text style={{color: 'white'}}>Signup with Facebook</Text>
+            <Text style={{color: 'white'}}>Signin with Facebook</Text>
           </Button>
         </View>
       </View>
