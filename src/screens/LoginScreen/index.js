@@ -6,11 +6,12 @@ import {
   Dimensions,
   Alert,
   Switch,
+  ScrollView,
   ImageBackground,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
-import {Login} from '../../store/action';
+import {SigninUser} from '../../store/action';
 import Signup from '../Signup';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -30,25 +31,28 @@ function LoginScreen(props) {
   // const [login, setLogin] = useState(false)
   const {navigation, route} = props;
   
-  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [userPass, setUserPass] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(props.error);
   const [hidePass, setHidePass] = useState(true);
 
-if(route.params != undefined && userName !== route.params.params.userName ){
+if(route.params != undefined && userEmail !== route.params.params.userEmail ){
 
-   setUserName(route.params.params.userName)
+   setUserEmail(route.params.params.userEmail)
 }
 
-  const signinwithEmail = () => {
-    if (userName === '' || userPass === '') {
+
+  const signinwithEmail = async() => {
+    if (userEmail === '' || userPass === '') {
       // setError('Fields are required');
-      createTwoButtonAlert();
+      createTwoButtonAlert('Error!!!', 'All Fields are required', () => console.log('OK Pressed'));
       return;
     }
-    props.Login(true);
+      props.SigninUser({login: true, email: userEmail, password: userPass});
+      
   };
 
+  
   // const signupwithEmail = () => {
   //   // props.Login(true);
   //   console.log("Signup Email")
@@ -66,10 +70,10 @@ if(route.params != undefined && userName !== route.params.params.userName ){
   //   // setPass( { showPassword: !this.state.showPassword });
   // }
 
-  const createTwoButtonAlert = () =>
+  const createTwoButtonAlert = (title, msg, func) =>
     Alert.alert(
-      `Error!!!`,
-      `All Fields are required`,
+      title,
+      msg,
       [
         ,
         // {
@@ -77,18 +81,19 @@ if(route.params != undefined && userName !== route.params.params.userName ){
         //   onPress: () => console.log("Cancel Pressed"),
         //   style: "cancel"
         // },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: 'OK', onPress: func},
       ],
       {cancelable: false},
     );
-  console.log(props.login, userName, userPass);
+  // console.log(props.login, userEmail, userPass);
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         // justifyContent: 'center',
         // alignItems: 'center',
         // backgroundColor: '#c1cdd0',
+        backgroundColor: 'black'
       }}>
       <View style={styles.ImageBg}>
         <ImageBackground source={image} style={styles.image}>
@@ -100,8 +105,8 @@ if(route.params != undefined && userName !== route.params.params.userName ){
       <View style={styles.container}>
         <Form>
           <Item floatingLabel>
-            <Label>Username</Label>
-            <Input value={userName} onChangeText={(val) => setUserName(val)} />
+            <Label>Email</Label>
+            <Input value={userEmail} onChangeText={(val) => setUserEmail(val)} />
           </Item>
             {/* <View> */}
           <Item floatingLabel>
@@ -138,8 +143,8 @@ if(route.params != undefined && userName !== route.params.params.userName ){
         </Form>
         <Text
           style={{
-            marginTop: 25,
-            marginBottom: 25,
+            marginTop: 28,
+            marginBottom: 30,
             textAlign: 'center',
             fontWeight: 'bold',
             fontSize: 20,
@@ -160,11 +165,11 @@ if(route.params != undefined && userName !== route.params.params.userName ){
               marginTop: 20,
               marginEnd: 30,
               marginStart: 30,
-              backgroundColor: 'red',
+              // backgroundColor: 'red',
             }}
             onPress={signinwithgmail}
             iconLeft
-            block>
+            block disabled>
             {/* <Icon name='home' /> */}
             <Text style={{color: 'white'}}>Signin with Gmail</Text>
           </Button>
@@ -172,7 +177,7 @@ if(route.params != undefined && userName !== route.params.params.userName ){
             style={{marginTop: 20, marginEnd: 30, marginStart: 30}}
             onPress={signinwithfb}
             iconLeft
-            block>
+            block disabled>
             {/* <Icon name='home' /> */}
             <Text style={{color: 'white'}}>Signin with Facebook</Text>
           </Button>
@@ -191,7 +196,7 @@ if(route.params != undefined && userName !== route.params.params.userName ){
         style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
         <Text style={{ color: 'white' }}>Go to Home</Text>
       </TouchableOpacity> */}
-    </View>
+    </ScrollView>
   );
 }
 // backgroundColor: '#ffffff'
@@ -199,13 +204,13 @@ const styles = StyleSheet.create({
   container: {
     width: WIDTH,
     // bottom: 50,
-    bottom: 0,
-    flex: 0.3,
+    // bottom: 0,
+    // flex: 0.3,
     backgroundColor: 'white',
-    position: 'absolute',
-    zIndex: 2,
-    left: 0,
-    paddingTop: 25,
+    // position: 'absolute',
+    // zIndex: 2,
+    // left: 0,
+    paddingTop: 20,
     // borderWidth: 5,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -224,8 +229,8 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 42,
-    paddingTop: 130,
-    paddingBottom: 130,
+    paddingTop: 120,
+    paddingBottom: 120,
     fontWeight: 'bold',
     textAlign: 'center',
     backgroundColor: '#000000a0',
@@ -249,12 +254,15 @@ const styles = StyleSheet.create({
 function mapStateToProp(state) {
   return {
     login: state.root.login,
+    error: state.root.error,
+    msg: state.root.msg,
+    
   };
 }
 function mapDispatchToProp(dispatch) {
   return {
-    Login: (data) => {
-      dispatch(Login(data));
+    SigninUser: (data) => {
+      dispatch(SigninUser(data));
     },
   };
 }

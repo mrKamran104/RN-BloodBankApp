@@ -10,7 +10,7 @@ import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
 import CustomDrawerItem from '../../components/CustomDrawerItem';
 import { connect } from 'react-redux';
-import { Login } from '../../store/action';
+import { Logout } from '../../store/action';
 import LoginScreen from './../../screens/LoginScreen/index';
 
 const CustomDrawerContent = (props) => {
@@ -73,6 +73,7 @@ const CustomDrawerContent = (props) => {
         <CustomDrawerItem
           title="Profile"
           icon={{ name: 'person', type: 'Ionicons' }}
+          onPress={() => navigation.navigate('Profile')}
         />
         {/* <CustomDrawerItem
           title="Home"
@@ -146,7 +147,7 @@ const CustomDrawerContent = (props) => {
           <CustomDrawerItem
             title={`Log Out`}
             icon={{ name: 'settings-sharp', type: 'Ionicons' }}
-            onPress={()=> props.Login(false)}
+            onPress={()=> props.Logout(false)}
           />
           
           
@@ -180,7 +181,7 @@ function mapStateToProp(state) {
 }
 function mapDispatchToProp(dispatch) {
   return ({
-      Login: (data) => { dispatch(Login(data)) }
+    Logout: (data) => { dispatch(Logout(data)) }
   })
 }
 

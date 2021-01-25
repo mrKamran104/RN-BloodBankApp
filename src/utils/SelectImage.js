@@ -1,10 +1,10 @@
 import ImagePicker from 'react-native-image-crop-picker';
-import { Image } from "react-native";
-import demo from "../assets/demo.png";
+import {Image} from 'react-native';
+import demo from '../assets/demo.png';
 
-const ImageUri = Image.resolveAssetSource(demo).uri
+const ImageUri = Image.resolveAssetSource(demo).uri;
 
-export const openCamera = async() => {
+export const openGallery = async () => {
   let d;
   await ImagePicker.openPicker({
     // width: 300,
@@ -14,18 +14,40 @@ export const openCamera = async() => {
     freeStyleCropEnabled: true,
     cropperToolbarTitle: 'Crop Photo',
     hideBottomControls: true,
-  }).then((image) => {
-    console.log(image);
-    d= image.path;
-  }).catch((e)=>{
-      d = ImageUri
   })
+    .then((image) => {
+      console.log(image);
+      d = image.path;
+    })
+    .catch((e) => {
+      d = ImageUri;
+    });
+  return d;
+};
+export const openCamera = async () => {
+  let d;
+  await ImagePicker.openCamera({
+    // width: 300,
+    // height: 400,
+    cropping: true,
+    mediaType: 'image',
+    freeStyleCropEnabled: true,
+    cropperToolbarTitle: 'Crop Photo',
+    hideBottomControls: true,
+  })
+    .then((image) => {
+      console.log(image);
+      d = image.path;
+    })
+    .catch((e) => {
+      d = ImageUri;
+    });
   return d;
 };
 
-export const openCrop = async(img) => {
-    let d;
-    await ImagePicker.openCropper({
+export const openCrop = async (img) => {
+  let d;
+  await ImagePicker.openCropper({
     path: img,
     width: 200,
     height: 200,
@@ -34,7 +56,7 @@ export const openCrop = async(img) => {
     hideBottomControls: true,
   }).then((image) => {
     console.log(image);
-    d =  image.path;
+    d = image.path;
   });
   return d;
 };

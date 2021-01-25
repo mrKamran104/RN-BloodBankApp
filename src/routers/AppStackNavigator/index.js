@@ -26,6 +26,7 @@ import HomeScreen from '../../screens/HomeScreen';
 import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
 import AboutScreen from './../../screens/AboutScreen';
+import ProfileScreen from './../../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -138,6 +139,7 @@ const AppStackNavigator = (props) => {
           />
           <Stack.Screen name="Details" component={DetailsScreen} />
           <Stack.Screen name="About" component={AboutScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
         </Stack.Navigator>
       </Animated.View>
     </Animated.View>

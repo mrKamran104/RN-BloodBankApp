@@ -7,13 +7,15 @@ import {
   Alert,
   Switch,
   ImageBackground,
+  ScrollView,
   Image,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 // import ImagePicker from 'react-native-image-crop-picker';
-import { openCamera, openCrop } from "../../utils/SelectImage";
+import { openCamera, openGallery } from "../../utils/SelectImage";
 import {Login} from '../../store/action';
+import {SignupUser} from '../../store/action';
 import {
   Container,
   Header,
@@ -26,10 +28,21 @@ import {
   //   Icon,
   Button,
   Radio,
+  ActionSheet
 } from 'native-base';
 import demo from "../../assets/demo.png";
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+var BUTTONS = [
+  { text: "Choose from Gallery", icon: "camera", iconColor: "#2c8ef4" },
+  { text: "Capture from Camera", icon: "camera", iconColor: "#f42ced" },
+  // { text: "Delete", icon: "trash", iconColor: "#fa213b" },
+  { text: "Cancel", icon: "close", iconColor: "#25de5b" }
+];
+// var DESTRUCTIVE_INDEX = 3;
+var CANCEL_INDEX = 2;
+
+
 function Signup(props) {
 
   const ImageUri = Image.resolveAssetSource(demo).uri
@@ -39,22 +52,28 @@ function Signup(props) {
   const [userName, setUserName] = useState('');
   const [userPass, setUserPass] = useState('');
   const [genderRadio, setGenderRadio] = useState(true);
+  // const [genderValue, setGenderValue] = useState('Male');
   const [userAddress, setUserAddress] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [passError, setPassError] = useState(false);
   const [resourcePath, setResourcePath] = useState(ImageUri);
+  const [hidePass, setHidePass] = useState(true);
+
+  
 
   const signupwithEmail = () => {
-    // if (userName === '' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
-    //   // setError('Fields are required');
-    //   createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
-    //   return;
-    // }
-    createTwoButtonAlert('Hurry', 'You are successfully signup,\n Click "Ok" to go Login screen', ()=> navigation.navigate('Signin', {params: {userName: userName}}));
-    // console.log('Signup Email');
+    if (userName === '' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
+      // setError('Fields are required');
+      createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
+      return;
+    }
+    props.SignupUser({email: userEmail, gender: genderRadio,password: userPass, userName: userName, address: userAddress, func: ()=>{navigation.navigate('Signin', {params: {userEmail: userEmail}})}})
+    // console.log('Signup Email', props.SignupUser);
     // props.Login(true);
   };
+
+  console.log('gender',genderRadio)
 
   const RadioButton = (props) => {
     return (
@@ -134,14 +153,16 @@ function Signup(props) {
     );
   console.log(props.login, userName, userPass);
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         // justifyContent: 'center',
         // alignItems: 'center',
+        // bottom: 20,
         backgroundColor: 'white',
       }}>
-      <View style={{}}>
+
+      <View style={styles.container}>
         <Text style={styles.text}>Signup Screen</Text>
         <Button
           style={styles.backButton}
@@ -151,18 +172,32 @@ function Signup(props) {
           {/* <Icon name='home' /> */}
           <Text style={{color: 'black'}}>Back</Text>
         </Button>
-      </View>
-
-      <View >
         <TouchableOpacity 
-          onPress={async()=> { let d = await openCamera(); setResourcePath(d)} }>
+          onPress={ 
+            () =>
+            ActionSheet.show(
+              {
+                options: BUTTONS,
+                cancelButtonIndex: CANCEL_INDEX,
+                // destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                title: "Please select a option:"
+              },
+              async(buttonIndex) => {
+                if(buttonIndex===0){
+                   let d = await openGallery(); setResourcePath(d)
+                }
+                else if(buttonIndex===1){
+                   let d = await openCamera(); setResourcePath(d)
+                }
+                else{
+
+                }
+              }
+            )
+          }>
           <Image source={{ uri: resourcePath }} style={{ height: 150, width: 150, resizeMode: 'cover', alignSelf: 'center' }} />
           {/* <Text style={styles.buttonText}>Select File</Text> */}
         </TouchableOpacity>
-      </View>
-
-      {/* <View> */}
-      <View style={styles.container}>
         <Form>
           <Item floatingLabel>
             <Label>Username</Label>
@@ -181,7 +216,7 @@ function Signup(props) {
             }}>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
-              onPress={() => setGenderRadio(true)}>
+              onPress={() => {setGenderRadio(true); }}>
               {RadioButton({
                 selected: genderRadio,
                 style: {borderColor: 'green'},
@@ -239,6 +274,7 @@ function Signup(props) {
             <Label>Password</Label>
             <Input
               value={userPass}
+              secureTextEntry={hidePass ? true : false}
               onChangeText={(val) => matchPassword(val)}
             />
           </Item>
@@ -251,6 +287,7 @@ function Signup(props) {
             <Input
               disabled={userPass === '' ? true : false}
               value={confirmPass}
+              secureTextEntry={hidePass ? true : false}
               onChangeText={(val) => matchConfirmPassword(val)}
             />
           </Item>
@@ -272,13 +309,13 @@ function Signup(props) {
           }}>
           - OR -
         </Text> */}
-      </View>
-      <View style={styles.container2}>
         <Button style={styles.signup} onPress={signupwithEmail} iconLeft block>
           {/* <Icon name='home' /> */}
           <Text style={{color: 'white'}}>Signup with Email</Text>
         </Button>
       </View>
+      {/* <View style={styles.container2}> */}
+      {/* </View> */}
       {/* </View> */}
 
       {/* <TouchableOpacity
@@ -292,17 +329,18 @@ function Signup(props) {
         style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
         <Text style={{ color: 'white' }}>Go to Home</Text>
       </TouchableOpacity> */}
-    </View>
+    </ScrollView>
   );
 }
 // backgroundColor: '#ffffff'
 const styles = StyleSheet.create({
   container: {
     width: WIDTH,
-    // bottom: 50,
+    // bottom: 0,
     // backgroundColor: 'white',
     paddingTop: 25,
     paddingBottom: 30,
+    // position: 'absolute',
     // flex: 0.3,
     // borderWidth: 5,
     // borderTopLeftRadius: 20,
@@ -381,9 +419,8 @@ function mapStateToProp(state) {
 }
 function mapDispatchToProp(dispatch) {
   return {
-    Login: (data) => {
-      dispatch(Login(data));
-    },
+    SignupUser: (data) => {dispatch(SignupUser(data));},
+    Login: (data) => {dispatch(Login(data));},
   };
 }
 
