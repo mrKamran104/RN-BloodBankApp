@@ -8,11 +8,12 @@ import {
   Switch,
   ImageBackground,
   Image,
+  Picker
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 // import ImagePicker from 'react-native-image-crop-picker';
-import {openCamera, openCrop} from '../../utils/SelectImage';
+import {openCamera, openGallery} from '../../utils/SelectImage';
 import {updateProfile} from '../../store/action';
 // import {SignupUser} from '../../store/action';
 import {
@@ -25,12 +26,23 @@ import {
   Label,
   ListItem,
   //   Icon,
+  CheckBox,
   Button,
-  Radio,
+  ActionSheet,
 } from 'native-base';
 import demo from '../../assets/demo.png';
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+
+var BUTTONS = [
+  { text: "Choose from Gallery", icon: "camera", iconColor: "#2c8ef4" },
+  { text: "Capture from Camera", icon: "camera", iconColor: "#f42ced" },
+  // { text: "Delete", icon: "trash", iconColor: "#fa213b" },
+  { text: "Cancel", icon: "close", iconColor: "#25de5b" }
+];
+// var DESTRUCTIVE_INDEX = 3;
+var CANCEL_INDEX = 2;
+
 function ProfileScreen(props) {
   const ImageUri = Image.resolveAssetSource(demo).uri;
 
@@ -41,8 +53,11 @@ function ProfileScreen(props) {
   const [userAddress, setUserAddress] = useState(props.address);
   const [userEmail, setUserEmail] = useState(props.email);
   const [resourcePath, setResourcePath] = useState(ImageUri);
+  const [bgSelected, setBgSelected] = useState(props.bloodGroup)
+  const [donor, setDonor] = useState(props.donor)
   const [edit, setEdit] = useState(false);
 
+  console.log("Profile",donor, bgSelected, props.bloodGroup)
   const EditProfile = () => {
     setEdit(true);
     if (edit) {
@@ -52,6 +67,8 @@ function ProfileScreen(props) {
         address: userAddress,
         email: userEmail,
         gender: genderRadio,
+        bloodGroup: bgSelected,
+        donor: donor,
       });
       setEdit(false);
     }
@@ -135,11 +152,30 @@ function ProfileScreen(props) {
       </View> */}
 
       <View>
-        <TouchableOpacity
-          onPress={async () => {
-            let d = await openCamera();
-            setResourcePath(d);
-          }}>
+      <TouchableOpacity 
+      disabled={!edit ? true : false}
+          onPress={ 
+            () =>
+            ActionSheet.show(
+              {
+                options: BUTTONS,
+                cancelButtonIndex: CANCEL_INDEX,
+                // destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                title: "Please select a option:"
+              },
+              async(buttonIndex) => {
+                if(buttonIndex===0){
+                   let d = await openGallery(); setResourcePath(d)
+                }
+                else if(buttonIndex===1){
+                   let d = await openCamera(); setResourcePath(d)
+                }
+                else{
+
+                }
+              }
+            )
+          } >
           <Image
             source={{uri: resourcePath}}
             style={{
@@ -177,7 +213,7 @@ function ProfileScreen(props) {
             }}>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
-              onPress={() => setGenderRadio(true)}>
+              onPress={() => setGenderRadio(true)} disabled={!edit ? true : false}>
               {RadioButton({
                 selected: genderRadio,
                 style: {borderColor: 'green'},
@@ -189,7 +225,7 @@ function ProfileScreen(props) {
             </TouchableOpacity>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
-              onPress={() => setGenderRadio(false)}>
+              onPress={() => setGenderRadio(false)} disabled={!edit ? true : false}>
               {RadioButton({
                 selected: !genderRadio,
                 style: {borderColor: 'green'},
@@ -200,6 +236,37 @@ function ProfileScreen(props) {
               </Text>
             </TouchableOpacity>
           </View>
+          <View style={{marginStart: 15,marginTop: 15, flexDirection: 'row',
+              justifyContent: 'space-between',}}>
+<Text style={{textAlignVertical: 'center'}}>Please choose your Blood 
+  Group: 
+</Text>
+
+         
+        {!edit ? 
+        <Picker
+        selectedValue={bgSelected}
+        style={{ height: 20, width: 150 }}
+        >
+        <Picker.Item label={bgSelected} value={bgSelected} /> 
+        </Picker>
+        : 
+         <Picker
+         selectedValue={bgSelected}
+         style={{ height: 20, width: 150 }}
+         onValueChange={(itemValue, itemIndex) => {setBgSelected(itemValue); console.log(itemValue)}}
+         >
+        <Picker.Item label="A+" value="A+" />
+        <Picker.Item label="A-" value="A-" />
+        <Picker.Item label="B+" value="B+" />
+        <Picker.Item label="B-" value="B-" />
+        <Picker.Item label="AB+" value="AB+" />
+        <Picker.Item label="AB-" value="AB-" />
+        <Picker.Item label="O+" value="O+" />
+        <Picker.Item label="O-" value="O-" />
+      </Picker>}
+        </View>
+
           <Item floatingLabel>
             <Label>Email</Label>
             <Input
@@ -218,6 +285,11 @@ function ProfileScreen(props) {
             />
           </Item>
         </Form>
+        <View style={{marginStart: 15,marginTop: 20, flexDirection: 'row', }}>
+<CheckBox checked={donor} onPress={()=> setDonor(!donor)} disabled={!edit ? true : false}/>
+  <Text style={{marginStart: 25}}>I want to be a Donor</Text>
+</View>
+
       </View>
       <View style={styles.container2}>
         <Button style={styles.signup} onPress={EditProfile} iconLeft block>
@@ -314,6 +386,8 @@ function mapStateToProp(state) {
     address: state.root.address,
     uid: state.root.uid,
     gender: state.root.gender,
+    bloodGroup: state.root.bloodGroup,
+    donor: state.root.donor 
   };
 }
 function mapDispatchToProp(dispatch) {

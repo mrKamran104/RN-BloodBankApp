@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
-import {SigninUser} from '../../store/action';
+import {SigninUser, Disable} from '../../store/action';
 import Signup from '../Signup';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -30,40 +30,44 @@ const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 function LoginScreen(props) {
   // const [login, setLogin] = useState(false)
   const {navigation, route} = props;
-  
+
   const [userEmail, setUserEmail] = useState('');
   const [userPass, setUserPass] = useState('');
   const [error, setError] = useState(props.error);
   const [hidePass, setHidePass] = useState(true);
+  // const [disable, setDisable] = useState(false)
 
-if(route.params != undefined && userEmail !== route.params.params.userEmail ){
+  if (
+    route.params != undefined &&
+    userEmail !== route.params.params.userEmail
+  ) {
+    setUserEmail(route.params.params.userEmail);
+  }
 
-   setUserEmail(route.params.params.userEmail)
-}
-
-
-  const signinwithEmail = async() => {
+  const signinwithEmail = async () => {
     if (userEmail === '' || userPass === '') {
       // setError('Fields are required');
-      createTwoButtonAlert('Error!!!', 'All Fields are required', () => console.log('OK Pressed'));
+      createTwoButtonAlert('Error!!!', 'All Fields are required', () =>
+        console.log('OK Pressed'),
+      );
       return;
     }
-      props.SigninUser({login: true, email: userEmail, password: userPass});
-      
+    props.Disable(true);
+    props.SigninUser({login: true, email: userEmail, password: userPass});
+    // setDisable(true)
   };
 
-  
   // const signupwithEmail = () => {
   //   // props.Login(true);
   //   console.log("Signup Email")
   // };
   const signinwithgmail = () => {
     // props.Login(true);
-    console.log("Gmail")
+    console.log('Gmail');
   };
   const signinwithfb = () => {
     // props.Login(true);
-    console.log("facebook")
+    console.log('facebook');
   };
 
   // const toggleSwitch = () =>{
@@ -93,7 +97,7 @@ if(route.params != undefined && userEmail !== route.params.params.userEmail ){
         // justifyContent: 'center',
         // alignItems: 'center',
         // backgroundColor: '#c1cdd0',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
       }}>
       <View style={styles.ImageBg}>
         <ImageBackground source={image} style={styles.image}>
@@ -106,12 +110,19 @@ if(route.params != undefined && userEmail !== route.params.params.userEmail ){
         <Form>
           <Item floatingLabel>
             <Label>Email</Label>
-            <Input value={userEmail} onChangeText={(val) => setUserEmail(val)} />
+            <Input
+              value={userEmail}
+              onChangeText={(val) => setUserEmail(val)}
+            />
           </Item>
-            {/* <View> */}
+          {/* <View> */}
           <Item floatingLabel>
             <Label>Password</Label>
-            <Input value={userPass} onChangeText={(val) => setUserPass(val)} secureTextEntry={hidePass ? true : false}/>
+            <Input
+              value={userPass}
+              onChangeText={(val) => setUserPass(val)}
+              secureTextEntry={hidePass ? true : false}
+            />
             {/* <Icon
               name={hidePass ? 'eye-slash' : 'eye'}
               size={15}
@@ -119,17 +130,18 @@ if(route.params != undefined && userEmail !== route.params.params.userEmail ){
               onPress={() => setHidePass(!hidePass)}
             /> */}
           </Item>
-        {/* </View> */}
+          {/* </View> */}
           <Button
             style={{
               marginTop: 50,
               marginEnd: 30,
               marginStart: 30,
-              backgroundColor: 'green',
+              backgroundColor: !props.disable ? 'green' : 'grey',
             }}
             onPress={signinwithEmail}
             iconLeft
-            block>
+            block
+            disabled={props.disable ? true : false}>
             {/* <Icon name='home' /> */}
             <Text style={{color: 'white'}}>Signin with Email</Text>
           </Button>
@@ -154,9 +166,10 @@ if(route.params != undefined && userEmail !== route.params.params.userEmail ){
         <View style={{paddingBottom: 50}}>
           <Button
             style={{marginEnd: 30, marginStart: 30}}
-            onPress={()=>navigation.navigate('Signup')}
+            onPress={() => navigation.navigate('Signup')}
             iconLeft
-            block>
+            block
+            disabled={props.disable ? true : false}>
             {/* <Icon name='home' /> */}
             <Text style={{color: 'white'}}>Signup with Email</Text>
           </Button>
@@ -169,7 +182,8 @@ if(route.params != undefined && userEmail !== route.params.params.userEmail ){
             }}
             onPress={signinwithgmail}
             iconLeft
-            block disabled>
+            block
+            disabled>
             {/* <Icon name='home' /> */}
             <Text style={{color: 'white'}}>Signin with Gmail</Text>
           </Button>
@@ -177,7 +191,8 @@ if(route.params != undefined && userEmail !== route.params.params.userEmail ){
             style={{marginTop: 20, marginEnd: 30, marginStart: 30}}
             onPress={signinwithfb}
             iconLeft
-            block disabled>
+            block
+            disabled>
             {/* <Icon name='home' /> */}
             <Text style={{color: 'white'}}>Signin with Facebook</Text>
           </Button>
@@ -254,15 +269,17 @@ const styles = StyleSheet.create({
 function mapStateToProp(state) {
   return {
     login: state.root.login,
-    error: state.root.error,
+    disable: state.root.disable,
     msg: state.root.msg,
-    
   };
 }
 function mapDispatchToProp(dispatch) {
   return {
     SigninUser: (data) => {
       dispatch(SigninUser(data));
+    },
+    Disable: (data) => {
+      dispatch(Disable(data));
     },
   };
 }

@@ -9,13 +9,14 @@ import {
   ImageBackground,
   ScrollView,
   Image,
+  Picker,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 // import ImagePicker from 'react-native-image-crop-picker';
-import { openCamera, openGallery } from "../../utils/SelectImage";
+import {openCamera, openGallery} from '../../utils/SelectImage';
 import {Login} from '../../store/action';
-import {SignupUser} from '../../store/action';
+import {SignupUser, Disable} from '../../store/action';
 import {
   Container,
   Header,
@@ -28,24 +29,23 @@ import {
   //   Icon,
   Button,
   Radio,
-  ActionSheet
+  CheckBox,
+  ActionSheet,
 } from 'native-base';
-import demo from "../../assets/demo.png";
+import demo from '../../assets/demo.png';
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 var BUTTONS = [
-  { text: "Choose from Gallery", icon: "camera", iconColor: "#2c8ef4" },
-  { text: "Capture from Camera", icon: "camera", iconColor: "#f42ced" },
+  {text: 'Choose from Gallery', icon: 'camera', iconColor: '#2c8ef4'},
+  {text: 'Capture from Camera', icon: 'camera', iconColor: '#f42ced'},
   // { text: "Delete", icon: "trash", iconColor: "#fa213b" },
-  { text: "Cancel", icon: "close", iconColor: "#25de5b" }
+  {text: 'Cancel', icon: 'close', iconColor: '#25de5b'},
 ];
 // var DESTRUCTIVE_INDEX = 3;
 var CANCEL_INDEX = 2;
 
-
 function Signup(props) {
-
-  const ImageUri = Image.resolveAssetSource(demo).uri
+  const ImageUri = Image.resolveAssetSource(demo).uri;
 
   // const [login, setLogin] = useState(false)
   const {navigation} = props;
@@ -59,21 +59,33 @@ function Signup(props) {
   const [passError, setPassError] = useState(false);
   const [resourcePath, setResourcePath] = useState(ImageUri);
   const [hidePass, setHidePass] = useState(true);
-
-  
+  const [bgSelected, setBgSelected] = useState('A+');
+  const [donor, setDonor] = useState(true);
 
   const signupwithEmail = () => {
-    if (userName === '' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
-      // setError('Fields are required');
-      createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
-      return;
-    }
-    props.SignupUser({email: userEmail, gender: genderRadio,password: userPass, userName: userName, address: userAddress, func: ()=>{navigation.navigate('Signin', {params: {userEmail: userEmail}})}})
+    // if (userName === '' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
+    //   // setError('Fields are required');
+    //   createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
+    //   return;
+    // }
+    props.Disable(true);
+    props.SignupUser({
+      bloodGroup: bgSelected,
+      donor: donor,
+      email: userEmail,
+      gender: genderRadio,
+      password: userPass,
+      userName: userName,
+      address: userAddress,
+      func: () => {
+        navigation.navigate('Signin', {params: {userEmail: userEmail}});
+      },
+    });
     // console.log('Signup Email', props.SignupUser);
     // props.Login(true);
   };
 
-  console.log('gender',genderRadio)
+  console.log('gender', genderRadio);
 
   const RadioButton = (props) => {
     return (
@@ -123,18 +135,18 @@ function Signup(props) {
     }
   };
 
-//   const openCamera = () => {
-//     ImagePicker.openPicker({
-//         // width: 300,
-//         // height: 400,
-//         // cropping: true,
-//         mediaType: 'any',
-        
-//     }).then(image => {
-//         console.log(image);
-//         setResourcePath(image.path);
-//     });
-// }
+  //   const openCamera = () => {
+  //     ImagePicker.openPicker({
+  //         // width: 300,
+  //         // height: 400,
+  //         // cropping: true,
+  //         mediaType: 'any',
+
+  //     }).then(image => {
+  //         console.log(image);
+  //         setResourcePath(image.path);
+  //     });
+  // }
 
   const createTwoButtonAlert = (title, msg, func) =>
     Alert.alert(
@@ -161,7 +173,6 @@ function Signup(props) {
         // bottom: 20,
         backgroundColor: 'white',
       }}>
-
       <View style={styles.container}>
         <Text style={styles.text}>Signup Screen</Text>
         <Button
@@ -172,30 +183,36 @@ function Signup(props) {
           {/* <Icon name='home' /> */}
           <Text style={{color: 'black'}}>Back</Text>
         </Button>
-        <TouchableOpacity 
-          onPress={ 
-            () =>
+        <TouchableOpacity
+          onPress={() =>
             ActionSheet.show(
               {
                 options: BUTTONS,
                 cancelButtonIndex: CANCEL_INDEX,
                 // destructiveButtonIndex: DESTRUCTIVE_INDEX,
-                title: "Please select a option:"
+                title: 'Please select a option:',
               },
-              async(buttonIndex) => {
-                if(buttonIndex===0){
-                   let d = await openGallery(); setResourcePath(d)
+              async (buttonIndex) => {
+                if (buttonIndex === 0) {
+                  let d = await openGallery();
+                  setResourcePath(d);
+                } else if (buttonIndex === 1) {
+                  let d = await openCamera();
+                  setResourcePath(d);
+                } else {
                 }
-                else if(buttonIndex===1){
-                   let d = await openCamera(); setResourcePath(d)
-                }
-                else{
-
-                }
-              }
+              },
             )
           }>
-          <Image source={{ uri: resourcePath }} style={{ height: 150, width: 150, resizeMode: 'cover', alignSelf: 'center' }} />
+          <Image
+            source={{uri: resourcePath}}
+            style={{
+              height: 150,
+              width: 150,
+              resizeMode: 'cover',
+              alignSelf: 'center',
+            }}
+          />
           {/* <Text style={styles.buttonText}>Select File</Text> */}
         </TouchableOpacity>
         <Form>
@@ -216,7 +233,9 @@ function Signup(props) {
             }}>
             <TouchableOpacity
               style={{flexDirection: 'row'}}
-              onPress={() => {setGenderRadio(true); }}>
+              onPress={() => {
+                setGenderRadio(true);
+              }}>
               {RadioButton({
                 selected: genderRadio,
                 style: {borderColor: 'green'},
@@ -238,6 +257,34 @@ function Signup(props) {
                 Female
               </Text>
             </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              marginStart: 15,
+              marginTop: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={{textAlignVertical: 'center'}}>
+              Please choose your Blood Group:
+            </Text>
+
+            <Picker
+              selectedValue={bgSelected}
+              style={{height: 20, width: 150}}
+              onValueChange={(itemValue, itemIndex) => {
+                setBgSelected(itemValue);
+                console.log(itemValue);
+              }}>
+              <Picker.Item label="A+" value="A+" />
+              <Picker.Item label="A-" value="A-" />
+              <Picker.Item label="B+" value="B+" />
+              <Picker.Item label="B-" value="B-" />
+              <Picker.Item label="AB+" value="AB+" />
+              <Picker.Item label="AB-" value="AB-" />
+              <Picker.Item label="O+" value="O+" />
+              <Picker.Item label="O-" value="O-" />
+            </Picker>
           </View>
           {/* <ListItem>
             <Left>
@@ -309,7 +356,22 @@ function Signup(props) {
           }}>
           - OR -
         </Text> */}
-        <Button style={styles.signup} onPress={signupwithEmail} iconLeft block>
+        <View style={{marginStart: 15, marginTop: 20, flexDirection: 'row'}}>
+          <CheckBox checked={donor} onPress={() => setDonor(!donor)} />
+          <Text style={{marginStart: 25}}>I want to be a Donor</Text>
+        </View>
+
+        <Button
+          style={{
+            marginTop: 50,
+            marginEnd: 30,
+            marginStart: 30,
+            backgroundColor: !props.disable ? 'green' : 'grey',
+          }}
+          onPress={signupwithEmail}
+          iconLeft
+          block
+          disabled={props.disable ? true : false}>
           {/* <Icon name='home' /> */}
           <Text style={{color: 'white'}}>Signup with Email</Text>
         </Button>
@@ -362,12 +424,6 @@ const styles = StyleSheet.create({
     // borderTopLeftRadius: 20,
     // borderTopRightRadius: 20,
   },
-  signup: {
-    marginTop: 50,
-    marginEnd: 30,
-    marginStart: 30,
-    backgroundColor: 'green',
-  },
   backButton: {
     // color: 'white',
     position: 'absolute',
@@ -387,6 +443,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
   },
+  row: {},
   text: {
     color: 'black',
     fontSize: 42,
@@ -415,12 +472,20 @@ const styles = StyleSheet.create({
 function mapStateToProp(state) {
   return {
     login: state.root.login,
+    disable: state.root.disable,
   };
 }
 function mapDispatchToProp(dispatch) {
   return {
-    SignupUser: (data) => {dispatch(SignupUser(data));},
-    Login: (data) => {dispatch(Login(data));},
+    SignupUser: (data) => {
+      dispatch(SignupUser(data));
+    },
+    Login: (data) => {
+      dispatch(Login(data));
+    },
+    Disable: (data) => {
+      dispatch(Disable(data));
+    },
   };
 }
 
