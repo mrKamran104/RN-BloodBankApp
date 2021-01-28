@@ -26,7 +26,7 @@ import {
   Input,
   Label,
   ListItem,
-  //   Icon,
+    Icon,
   Button,
   Radio,
   CheckBox,
@@ -180,8 +180,8 @@ function Signup(props) {
           onPress={() => navigation.goBack()}
           iconLeft
           transparent>
-          {/* <Icon name='home' /> */}
-          <Text style={{color: 'black'}}>Back</Text>
+          <Icon type="Ionicons" name="arrow-back" style={{color: 'black'}}/>
+          {/* <Text style={{color: 'black'}}>Back</Text> */}
         </Button>
         <TouchableOpacity
           onPress={() =>
@@ -216,7 +216,7 @@ function Signup(props) {
           {/* <Text style={styles.buttonText}>Select File</Text> */}
         </TouchableOpacity>
         <Form>
-          <Item floatingLabel>
+          <Item floatingLabel style={{marginEnd: 20}}>
             <Label>Username</Label>
             <Input value={userName} onChangeText={(val) => setUserName(val)} />
           </Item>
@@ -302,7 +302,7 @@ function Signup(props) {
               <Radio selected={true} />
             </Right>
           </ListItem> */}
-          <Item floatingLabel>
+          <Item floatingLabel style={{marginEnd: 20}}>
             <Label>Email</Label>
             <Input
               value={userEmail}
@@ -310,23 +310,29 @@ function Signup(props) {
               onChangeText={(val) => setUserEmail(val)}
             />
           </Item>
-          <Item floatingLabel>
+          <Item floatingLabel style={{marginEnd: 20}}>
             <Label>Address</Label>
             <Input
               value={userAddress}
               onChangeText={(val) => setUserAddress(val)}
             />
           </Item>
-          <Item floatingLabel>
+          <Item floatingLabel style={{marginEnd: 20}}>
             <Label>Password</Label>
             <Input
               value={userPass}
               secureTextEntry={hidePass ? true : false}
               onChangeText={(val) => matchPassword(val)}
             />
+            <Icon type="FontAwesome"
+              name={hidePass ? 'eye-slash' : 'eye'}
+              size={15}
+              color="grey"
+              onPress={() => setHidePass(!hidePass)}
+            />
           </Item>
           <Item
-            floatingLabel
+            floatingLabel style={{marginEnd: 20}}
             error={confirmPass === '' ? false : passError ? true : false}
             // success={!passError? userPass===''?false: true : false}
             disabled={userPass === '' ? true : false}>
@@ -427,8 +433,8 @@ const styles = StyleSheet.create({
   backButton: {
     // color: 'white',
     position: 'absolute',
-    top: 10,
-    left: 15,
+    top: 5,
+    // left: 15,
     // backgroundColor: '',
     // fontSize: 20,
   },

@@ -53,7 +53,7 @@ const CustomDrawerContent = (props) => {
       <Animated.View style={{ opacity: opacity }}>
         <CustomDrawerItem
           title="Home"
-          icon={{ name: 'pets', type: 'MaterialIcons' }}
+          icon={{ name: 'home', type: 'MaterialIcons' }}
           onPress={() => navigation.navigate('Home')}
         />
         <CustomDrawerItem
@@ -67,7 +67,7 @@ const CustomDrawerContent = (props) => {
         />
         <CustomDrawerItem
           title="About"
-          icon={{ name: 'heart', type: 'FontAwesome' }}
+          icon={{ name: 'info-circle', type: 'FontAwesome' }}
           onPress={() => navigation.navigate('About')}
         />
         {/* <CustomDrawerItem

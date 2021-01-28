@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import demo from '../../assets/demo.png';
+import {Icon} from 'native-base';
 
 export default function AboutScreen(props) {
   const ImageUri = Image.resolveAssetSource(demo).uri;
@@ -32,7 +33,7 @@ export default function AboutScreen(props) {
         onPress={() => navigation.openDrawer()}
         style={{ marginTop: 100, marginBottom: 10, backgroundColor: '#14151f', shadowColor: 'black', elevation: 20, width: 60, height: 60, borderRadius: 60 }}>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Text style={{ color: 'white' }}>Back</Text>
+        <Icon type="Ionicons" name="arrow-back" style={{color: 'white'}}/>
         </View>
       </TouchableOpacity>
     </View>

@@ -15,6 +15,10 @@
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
+    Icon,
+} from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
+import {
   Button,
 } from 'native-base';
 import * as React from 'react';
@@ -126,7 +130,9 @@ const AppStackNavigator = (props) => {
               name="Home"
               component={HomeScreen}
               options={{
-                headerLeft: () => <Button onPress={() => navigation.openDrawer()} transparent style={{ position: 'absolute', top: 5, left: 15, }}><Text style={{ color: 'black' }}>open</Text></Button>
+                headerLeft: () => 
+                <Button onPress={() => navigation.openDrawer()} transparent>
+                  <Icon type='MaterialIcons' name="menu" style={{color: 'black', fontSize: 24}} /></Button>
               }}
             // options={({ login }) => ({ login: route.params.login })}
             // options={
@@ -143,8 +149,8 @@ const AppStackNavigator = (props) => {
               options={{ header: () => null, }} />
             <Stack.Screen name="Profile" component={ProfileScreen}
               options={{
-                headerLeft: () => <Button onPress={() => navigation.openDrawer()} transparent style={{ position: 'absolute', top: 5, left: 15, }}><Text style={{ color: 'black' }}>open</Text></Button>
-              }} />
+                headerLeft: () => <Button onPress={() => navigation.openDrawer()} transparent>
+                <Icon type='MaterialIcons' name="menu" style={{color: 'black', fontSize: 24}} /></Button>}} />
           </Stack.Navigator>
         </Animated.View>
       </Animated.View>

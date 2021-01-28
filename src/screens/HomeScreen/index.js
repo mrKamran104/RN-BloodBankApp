@@ -108,7 +108,7 @@ function HomeScreen(props) {
       <ScrollView style={{marginTop: 25, marginBottom: 55}}>
         {props.getDonors?.map((v, i) => {
           return (
-            // props.uid === v.uid? null:
+            props.uid === v.uid? null:
             v.donor ? (
               <View style={{alignItems: 'center'}} key={i}>
                 <Card style={{width: WIDTH - 20}}>

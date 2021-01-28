@@ -13,12 +13,12 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {SigninUser, Disable} from '../../store/action';
 import Signup from '../Signup';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   Container,
   Header,
   Content,
   Form,
+  Icon,
   Item,
   Input,
   Label,
@@ -108,7 +108,7 @@ function LoginScreen(props) {
       {/* <View> */}
       <View style={styles.container}>
         <Form>
-          <Item floatingLabel>
+          <Item floatingLabel style={{marginEnd: 20}}>
             <Label>Email</Label>
             <Input
               value={userEmail}
@@ -116,19 +116,19 @@ function LoginScreen(props) {
             />
           </Item>
           {/* <View> */}
-          <Item floatingLabel>
+          <Item floatingLabel style={{marginEnd: 20}}>
             <Label>Password</Label>
             <Input
               value={userPass}
               onChangeText={(val) => setUserPass(val)}
               secureTextEntry={hidePass ? true : false}
             />
-            {/* <Icon
+            <Icon type="FontAwesome"
               name={hidePass ? 'eye-slash' : 'eye'}
               size={15}
               color="grey"
               onPress={() => setHidePass(!hidePass)}
-            /> */}
+            />
           </Item>
           {/* </View> */}
           <Button

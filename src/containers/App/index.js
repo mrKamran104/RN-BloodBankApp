@@ -15,13 +15,13 @@ function App(props) {
     {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
     {/* <AppStackNavigator> */}
 
-    {/* {!props.login? <StartRouter/> : */}
+    {!props.login? <StartRouter/> :
     <DrawerAnimationProvider>
       <NavigationContainer>
         <AppDrawerNavigator />
       </NavigationContainer>
     </DrawerAnimationProvider>
-    {/*  } */}
+    } 
       {/* </AppStackNavigator> */}
     </>
   );
