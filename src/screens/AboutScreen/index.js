@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import demo from '../../assets/demo.png';
 
 export default function AboutScreen(props) {
+  const ImageUri = Image.resolveAssetSource(demo).uri;
   const { navigation } = props;
   return (
     <View
@@ -10,13 +12,28 @@ export default function AboutScreen(props) {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'gray',
+        backgroundColor: 'white',
       }}>
-      <Text style={{ padding: 20 }}>About Screen</Text>
+      <Text style={{ fontSize: 35, fontWeight: 'bold' }}>Blood Bank</Text>
+      <Text style={{color: 'gray'}}>Version 1.0</Text>
+      <View style={{ marginTop: 30 }}>
+        <Image source={{ uri: ImageUri }}
+          style={{
+            height: 150,
+            width: 150,
+            resizeMode: 'cover',
+            alignSelf: 'center',
+            // borderRadius: 150
+          }}
+        />
+      </View>
+      <Text style={{ padding: 25 }}>{'\u00A9'} 2020-2021 Blood Bank Inc.</Text>
       <TouchableOpacity
         onPress={() => navigation.openDrawer()}
-        style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
-        <Text style={{ color: 'white' }}>Toggle Drawer</Text>
+        style={{ marginTop: 100, marginBottom: 10, backgroundColor: '#14151f', shadowColor: 'black', elevation: 20, width: 60, height: 60, borderRadius: 60 }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Text style={{ color: 'white' }}>Back</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );

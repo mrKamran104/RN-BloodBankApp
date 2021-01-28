@@ -57,16 +57,6 @@ const CustomDrawerContent = (props) => {
           onPress={() => navigation.navigate('Home')}
         />
         <CustomDrawerItem
-          title="Details"
-          icon={{ name: 'plus', type: 'FontAwesome' }}
-          onPress={() => navigation.navigate('Details')}
-        />
-        <CustomDrawerItem
-          title="About"
-          icon={{ name: 'heart', type: 'FontAwesome' }}
-          onPress={() => navigation.navigate('About')}
-        />
-        <CustomDrawerItem
           title="Messages"
           icon={{ name: 'envelope', type: 'FontAwesome' }}
         />
@@ -74,6 +64,11 @@ const CustomDrawerContent = (props) => {
           title="Profile"
           icon={{ name: 'person', type: 'Ionicons' }}
           onPress={() => navigation.navigate('Profile')}
+        />
+        <CustomDrawerItem
+          title="About"
+          icon={{ name: 'heart', type: 'FontAwesome' }}
+          onPress={() => navigation.navigate('About')}
         />
         {/* <CustomDrawerItem
           title="Home"

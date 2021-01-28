@@ -68,65 +68,66 @@ const AppStackNavigator = (props) => {
 
   return (
     <>
-     <Animated.View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        transform: [
-          { scale: scale },
-          // { rotate: '-5deg' },
-          { translateX: translateXContainer },
-          // { translateX: translateX },
-        ],
-        // shadowColor: '#000000',
-        // shadowOffset: { height: 3, width: -3 },
-        // shadowOpacity: opacity,
-        // shadowRadius: 20,
-        // overflow: 'visible',
-      }}>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          height: '100%',
-          borderRadius: borderRadius,
-          overflow: 'hidden',
-          backgroundColor: 'white',
-          opacity: 0.4,
-          transform: [
-            // { translateX: translateX },
-            { translateX: translateX },
-            { scale: backgroundScreen },
-          ],
-          zIndex: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-        }}>
-        <HomeScreen />
-      </Animated.View>
-
       <Animated.View
         style={{
           flex: 1,
-          borderRadius: borderRadius,
-          overflow: 'hidden',
+          justifyContent: 'center',
+          transform: [
+            { scale: scale },
+            // { rotate: '-5deg' },
+            { translateX: translateXContainer },
+            // { translateX: translateX },
+          ],
+          // shadowColor: '#000000',
+          // shadowOffset: { height: 3, width: -3 },
+          // shadowOpacity: opacity,
+          // shadowRadius: 20,
+          // overflow: 'visible',
         }}>
-         
-        <Stack.Navigator
-          screenOptions={{
-            headerLeft: () => (
-              <Button onPress={() => navigation.openDrawer()} transparent style={{position:'absolute',top: 5,left: 15,}}><Text style={{color: 'black'}}>open</Text></Button>
-              // <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              //   <Text>Toggle</Text>
-              // </TouchableOpacity>
-            ),
-            // header: () => null,
+        <Animated.View
+          style={{
+            position: 'absolute',
+            height: '100%',
+            borderRadius: borderRadius,
+            overflow: 'hidden',
+            backgroundColor: 'white',
+            opacity: 0.4,
+            transform: [
+              // { translateX: translateX },
+              { translateX: translateX },
+              { scale: backgroundScreen },
+            ],
+            zIndex: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+          }}>
+          <HomeScreen />
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            flex: 1,
+            borderRadius: borderRadius,
+            overflow: 'hidden',
           }}>
 
-
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
+          <Stack.Navigator
+          // screenOptions={{
+          //   headerLeft: () => (
+          //     <Button onPress={() => navigation.openDrawer()} transparent style={{position:'absolute',top: 5,left: 15,}}><Text style={{color: 'black'}}>open</Text></Button>
+          //     // <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          //     //   <Text>Toggle</Text>
+          //     // </TouchableOpacity>
+          //   ),
+          // header: () => null,
+          >
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                headerLeft: () => <Button onPress={() => navigation.openDrawer()} transparent style={{ position: 'absolute', top: 5, left: 15, }}><Text style={{ color: 'black' }}>open</Text></Button>
+              }}
             // options={({ login }) => ({ login: route.params.login })}
             // options={
             //   {
@@ -136,13 +137,17 @@ const AppStackNavigator = (props) => {
             //     },
             //   }
             // }
-          />
-          <Stack.Screen name="Details" component={DetailsScreen} />
-          <Stack.Screen name="About" component={AboutScreen} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-        </Stack.Navigator>
+            />
+            <Stack.Screen name="Details" component={DetailsScreen} />
+            <Stack.Screen name="About" component={AboutScreen}
+              options={{ header: () => null, }} />
+            <Stack.Screen name="Profile" component={ProfileScreen}
+              options={{
+                headerLeft: () => <Button onPress={() => navigation.openDrawer()} transparent style={{ position: 'absolute', top: 5, left: 15, }}><Text style={{ color: 'black' }}>open</Text></Button>
+              }} />
+          </Stack.Navigator>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
     </>
   );
 };

@@ -151,7 +151,7 @@ function ProfileScreen(props) {
         </Button>
       </View> */}
 
-      <View>
+      <View style={{marginTop: 15}}>
       <TouchableOpacity 
       disabled={!edit ? true : false}
           onPress={ 
@@ -183,6 +183,7 @@ function ProfileScreen(props) {
               width: 150,
               resizeMode: 'cover',
               alignSelf: 'center',
+              borderRadius: 150
             }}
           />
           {/* <Text style={styles.buttonText}>Select File</Text> */}
