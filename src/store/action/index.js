@@ -1,9 +1,28 @@
 // import ActionTypes from '../constant/constant';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 import firebase from './firebase';
 // import history from '../../history'
 
 // Initialize Firebase
+const uriToBlob = (uri) => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      // return the blob
+      resolve(xhr.response);
+    };
+    
+    xhr.onerror = function() {
+      // something went wrong
+      reject(new Error('uriToBlob failed'));
+    };
+    // this helps us get a blob
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    
+    xhr.send(null);
+  });
+}
 
 export function Logout(data) {
   return (dispatch) =>
@@ -12,7 +31,7 @@ export function Logout(data) {
       .signOut()
       .then(() => {
         // Sign-out successful.
-        dispatch({type: 'Logout', payload: data});
+        dispatch({ type: 'Logout', payload: data });
       })
       .catch((error) => {
         // An error happened.
@@ -21,42 +40,46 @@ export function Logout(data) {
 
 export function SignupUser(user) {
   console.log('before', user);
+  let create_user = {
+    name: user.userName,
+    email: user.email,
+    address: user.address,
+    gender: user.gender,
+    bloodGroup: user.bloodGroup,
+    donor: user.donor,
+  }
   // return dispatch => dispatch({type: "Login", payload: data})
   return (dispatch) => {
     return firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(function (result) {
-        let create_user = {
-          name: user.userName,
-          email: user.email,
-          address: user.address,
-          // profile: user.photoURL,
-          gender: user.gender,
-          uid: result.user.uid,
-          bloodGroup: user.bloodGroup,
-          donor: user.donor,
-        };
+        create_user['uid'] = result.user.uid;
+
         return firebase
-          .database()
-          .ref('/')
-          .child(`users/${result.user.uid}`)
-          .set(create_user)
-          .then(() => {
-            console.log('database', create_user);
-            createTwoButtonAlert(
-              'Hurry',
-              'You are successfully signup,\n Click "Ok" to go Login screen',
-              user.func,
-            );
-            dispatch({type: 'SignupUser', payload: create_user});
-            // alert('user login successfully')
-            // history.push('/chat')
-          });
-        console.log('afterdb', result.user.uid);
-        // history.push('/login')
-      })
-      .catch(function (error) {
+          .storage()
+          .ref().child(`images/${result.user.uid}.jpg`).put(user.photo, {contentType: 'image/jpeg'})
+          .then(function (uploadImage) {
+            // create_user['photo'] = ;
+            console.log("uploadImage", uploadImage)
+            // return firebase
+            //   .database()
+            //   .ref('/')
+            //   .child(`users/${result.user.uid}`)
+            //   .set(create_user)
+            //   .then(() => {
+            //     console.log('database', create_user);
+            // createTwoButtonAlert(
+            //   'Hurry',
+            //   'You are successfully signup,\n Click "Ok" to go Login screen',
+            //   user.func,
+            // );
+            //     dispatch({ type: 'SignupUser', payload: create_user });
+            //     // alert('user login successfully')
+            //     // history.push('/chat')
+            //   });
+          })
+      }).catch(function (error) {
         console.log(error);
         dispatch({
           type: 'Disable',
@@ -67,9 +90,11 @@ export function SignupUser(user) {
         );
         // dispatch({ type: 'SignupUser', payload: create_user })
       });
+
   };
-  // return dispatch => dispatch({type: 'SignupUser', payload: user})
 }
+// return dispatch => dispatch({type: 'SignupUser', payload: user})
+
 
 export function Disable(para) {
   return (dispatch) => {
@@ -87,23 +112,26 @@ export function SigninUser(user) {
       .signInWithEmailAndPassword(user.email, user.password)
       .then(function (result) {
         console.log(result);
-
-        return firebase
-          .database()
-          .ref('/')
-          .child(`users/${result.user.uid}`)
-          .once('value')
-          .then((data) => {
-            // this.state.chats.push(messages.val())
-            // this.setState({
-            //     chats: this.state.chats
-            // })
-            console.log(data.val().address);
-            dispatch({
-              type: 'SigninUser',
-              payload: {data: data.val(), login: user.login},
-            });
-          });
+        return firebase.storage.ref().child(`images/${result.user.uid}.jpg`).getDownloadURL()
+        .then(fireBaseUrl => {
+            console.log(fireBaseUrl)
+          //   return firebase
+          //     .database()
+          //     .ref('/')
+          //     .child(`users/${result.user.uid}`)
+          //     .once('value')
+          //     .then((data) => {
+          //       // this.state.chats.push(messages.val())
+          //       // this.setState({
+          //       //     chats: this.state.chats
+          //       // })
+          //       console.log(data.val().address);
+          //       dispatch({
+          //         type: 'SigninUser',
+          //         payload: { data: data.val(), login: user.login },
+          //       });
+          //     });
+          })
       })
       .catch(function (error) {
         // console.log(`${error}`);
@@ -139,7 +167,7 @@ export function updateProfile(user) {
       .update(update_user)
       .then(() => {
         console.log('database', update_user);
-        dispatch({type: 'updateProfile', payload: update_user});
+        dispatch({ type: 'updateProfile', payload: update_user });
         // alert('user login successfully')
         // history.push('/chat')
       });
@@ -246,8 +274,8 @@ const createTwoButtonAlert = (title, msg, func) => {
       //   onPress: () => console.log("Cancel Pressed"),
       //   style: "cancel"
       // },
-      {text: 'OK', onPress: func},
+      { text: 'OK', onPress: func },
     ],
-    {cancelable: false},
+    { cancelable: false },
   );
 };

@@ -77,6 +77,7 @@ function Signup(props) {
       password: userPass,
       userName: userName,
       address: userAddress,
+      photo: resourcePath,
       func: () => {
         navigation.navigate('Signin', {params: {userEmail: userEmail}});
       },
@@ -195,7 +196,7 @@ function Signup(props) {
               async (buttonIndex) => {
                 if (buttonIndex === 0) {
                   let d = await openGallery();
-                  setResourcePath(d);
+                  setResourcePath(d.uri);
                 } else if (buttonIndex === 1) {
                   let d = await openCamera();
                   setResourcePath(d);
