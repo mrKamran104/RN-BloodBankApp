@@ -42,7 +42,7 @@ export default function DetailsScreen(props) {
         Donor Details
       </Text>
       <View style={{marginTop:25}}>
-          <Image source={{uri: ImageUri}}
+          <Image source={{uri: route.params.params.select.photo}}
             style={{
               height: 150,
               width: 150,
@@ -59,6 +59,7 @@ export default function DetailsScreen(props) {
           <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 30 }}>Email:</Text>
           <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 30 }}>Blood Group:</Text>
           <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 30 }}>Address:</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 30 }}>Phone #:</Text>
         </View>
         <View style={{ flexDirection: 'column' }}>
           <Text style={{ fontSize: 20, marginTop: 30}}>{route.params.params.select.name}</Text>
@@ -66,6 +67,7 @@ export default function DetailsScreen(props) {
           <Text style={{ fontSize: 20, marginTop: 30}}>{route.params.params.select.email}</Text>
           <Text style={{ fontSize: 20, marginTop: 30}}>{route.params.params.select.bloodGroup}</Text>
           <Text style={{ fontSize: 20, marginTop: 30 }}>{route.params.params.select.address}</Text>
+          <Text style={{ fontSize: 20, marginTop: 30 }}>{route.params.params.select.phoneNo}</Text>
         </View>
       </View>
     </View>

@@ -44,7 +44,7 @@ var BUTTONS = [
 var CANCEL_INDEX = 2;
 
 function ProfileScreen(props) {
-  const ImageUri = Image.resolveAssetSource(demo).uri;
+  // const ImageUri = Image.resolveAssetSource(demo).uri;
 
   // const [login, setLogin] = useState(false)
   const {navigation} = props;
@@ -52,10 +52,11 @@ function ProfileScreen(props) {
   const [genderRadio, setGenderRadio] = useState(props.gender);
   const [userAddress, setUserAddress] = useState(props.address);
   const [userEmail, setUserEmail] = useState(props.email);
-  const [resourcePath, setResourcePath] = useState(ImageUri);
+  const [resourcePath, setResourcePath] = useState(props.photo);
   const [bgSelected, setBgSelected] = useState(props.bloodGroup)
   const [donor, setDonor] = useState(props.donor)
   const [edit, setEdit] = useState(false);
+  const [phoneNo, setPhoneNo] = useState(props.phoneNo)
 
   console.log("Profile",donor, bgSelected, props.bloodGroup)
   const EditProfile = () => {
@@ -69,6 +70,8 @@ function ProfileScreen(props) {
         gender: genderRadio,
         bloodGroup: bgSelected,
         donor: donor,
+        photo: resourcePath,
+        phoneNo: phoneNo
       });
       setEdit(false);
     }
@@ -165,10 +168,10 @@ function ProfileScreen(props) {
               },
               async(buttonIndex) => {
                 if(buttonIndex===0){
-                   let d = await openGallery(); setResourcePath(d)
+                   let d = await openGallery(resourcePath); setResourcePath(d)
                 }
                 else if(buttonIndex===1){
-                   let d = await openCamera(); setResourcePath(d)
+                   let d = await openCamera(resourcePath); setResourcePath(d)
                 }
                 else{
 
@@ -285,6 +288,14 @@ function ProfileScreen(props) {
               onChangeText={(val) => setUserAddress(val)}
             />
           </Item>
+          <Item floatingLabel>
+            <Label>Phone #</Label>
+            <Input
+              value={phoneNo}
+              disabled={!edit ? true : false}
+              onChangeText={(val) => setPhoneNo(val)}
+            />
+          </Item>
         </Form>
         <View style={{marginStart: 15,marginTop: 20, flexDirection: 'row', }}>
 <CheckBox checked={donor} onPress={()=> setDonor(!donor)} disabled={!edit ? true : false}/>
@@ -388,7 +399,9 @@ function mapStateToProp(state) {
     uid: state.root.uid,
     gender: state.root.gender,
     bloodGroup: state.root.bloodGroup,
-    donor: state.root.donor 
+    donor: state.root.donor,
+    photo: state.root.photo,
+    phoneNo: state.root.phoneNo,
   };
 }
 function mapDispatchToProp(dispatch) {

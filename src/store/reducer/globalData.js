@@ -6,11 +6,12 @@ const INITIAL_STATE = {
   // password: "",
   login: false,
   disable: false,
-  // msg: ''
+  photo: '',
   gender: true,
   bloodGroup: '',
   donor: false,
   getDonors: [],
+  phoneNo: ''
 };
 
 export default globalData = (state = INITIAL_STATE, action) => {
@@ -38,7 +39,8 @@ export default globalData = (state = INITIAL_STATE, action) => {
         bloodGroup: action.payload.bloodGroup,
         donor: action.payload.donor,
         disable: false,
-        // password: action.payload.password
+        photo: action.payload.photo,
+        phoneNo: action.payload.phoneNo
       };
     case 'SigninUser':
       console.log('signin', action);
@@ -53,7 +55,8 @@ export default globalData = (state = INITIAL_STATE, action) => {
         uid: action.payload.data.uid,
         bloodGroup: action.payload.data.bloodGroup,
         donor: action.payload.data.donor,
-        // password: action.payload.password
+        photo: action.payload.data.photo,
+        phoneNo: action.payload.data.phoneNo
       };
     case 'updateProfile':
       console.log('update', action);
@@ -68,7 +71,7 @@ export default globalData = (state = INITIAL_STATE, action) => {
         uid: action.payload.uid,
         bloodGroup: action.payload.bloodGroup,
         donor: action.payload.donor,
-        // password: action.payload.password
+        phoneNo: action.payload.phoneNo
       };
     case 'Logout':
       // console.log(action)

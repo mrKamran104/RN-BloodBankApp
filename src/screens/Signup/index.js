@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,12 @@ import {
   Image,
   Picker,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {connect} from 'react-redux';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 // import ImagePicker from 'react-native-image-crop-picker';
-import {openCamera, openGallery} from '../../utils/SelectImage';
-import {Login} from '../../store/action';
-import {SignupUser, Disable} from '../../store/action';
+import { openCamera, openGallery } from '../../utils/SelectImage';
+import { Login } from '../../store/action';
+import { SignupUser, Disable } from '../../store/action';
 import {
   Container,
   Header,
@@ -26,7 +26,7 @@ import {
   Input,
   Label,
   ListItem,
-    Icon,
+  Icon,
   Button,
   Radio,
   CheckBox,
@@ -34,21 +34,22 @@ import {
 } from 'native-base';
 import demo from '../../assets/demo.png';
 
-const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 var BUTTONS = [
-  {text: 'Choose from Gallery', icon: 'camera', iconColor: '#2c8ef4'},
-  {text: 'Capture from Camera', icon: 'camera', iconColor: '#f42ced'},
+  { text: 'Choose from Gallery', icon: 'camera', iconColor: '#2c8ef4' },
+  { text: 'Capture from Camera', icon: 'camera', iconColor: '#f42ced' },
   // { text: "Delete", icon: "trash", iconColor: "#fa213b" },
-  {text: 'Cancel', icon: 'close', iconColor: '#25de5b'},
+  { text: 'Cancel', icon: 'close', iconColor: '#25de5b' },
 ];
 // var DESTRUCTIVE_INDEX = 3;
 var CANCEL_INDEX = 2;
 
 function Signup(props) {
   const ImageUri = Image.resolveAssetSource(demo).uri;
+  // console.log(ImageUri)
 
   // const [login, setLogin] = useState(false)
-  const {navigation} = props;
+  const { navigation } = props;
   const [userName, setUserName] = useState('');
   const [userPass, setUserPass] = useState('');
   const [genderRadio, setGenderRadio] = useState(true);
@@ -61,13 +62,14 @@ function Signup(props) {
   const [hidePass, setHidePass] = useState(true);
   const [bgSelected, setBgSelected] = useState('A+');
   const [donor, setDonor] = useState(true);
+  const [phoneNo, setPhoneNo] = useState('')
 
   const signupwithEmail = () => {
-    // if (userName === '' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
-    //   // setError('Fields are required');
-    //   createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
-    //   return;
-    // }
+    if (userName === '' || phoneNo==='' || userPass === '' || userAddress === '' || userEmail === '' || passError === true || confirmPass === '' || resourcePath === ImageUri) {
+      // setError('Fields are required');
+      createTwoButtonAlert('Error!!!', 'All fields are required!!!', () => console.log('OK Pressed'));
+      return;
+    }
     props.Disable(true);
     props.SignupUser({
       bloodGroup: bgSelected,
@@ -78,8 +80,9 @@ function Signup(props) {
       userName: userName,
       address: userAddress,
       photo: resourcePath,
+      phoneNo: phoneNo,
       func: () => {
-        navigation.navigate('Signin', {params: {userEmail: userEmail}});
+        navigation.navigate('Signin', { params: { userEmail: userEmail } });
       },
     });
     // console.log('Signup Email', props.SignupUser);
@@ -160,9 +163,9 @@ function Signup(props) {
         //   onPress: () => console.log("Cancel Pressed"),
         //   style: "cancel"
         // },
-        {text: 'OK', onPress: func},
+        { text: 'OK', onPress: func },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   console.log(props.login, userName, userPass);
   return (
@@ -181,7 +184,7 @@ function Signup(props) {
           onPress={() => navigation.goBack()}
           iconLeft
           transparent>
-          <Icon type="Ionicons" name="arrow-back" style={{color: 'black'}}/>
+          <Icon type="Ionicons" name="arrow-back" style={{ color: 'black' }} />
           {/* <Text style={{color: 'black'}}>Back</Text> */}
         </Button>
         <TouchableOpacity
@@ -195,10 +198,10 @@ function Signup(props) {
               },
               async (buttonIndex) => {
                 if (buttonIndex === 0) {
-                  let d = await openGallery();
-                  setResourcePath(d.uri);
+                  let d = await openGallery(resourcePath);
+                  setResourcePath(d);
                 } else if (buttonIndex === 1) {
-                  let d = await openCamera();
+                  let d = await openCamera(resourcePath);
                   setResourcePath(d);
                 } else {
                 }
@@ -206,7 +209,7 @@ function Signup(props) {
             )
           }>
           <Image
-            source={{uri: resourcePath}}
+            source={{ uri: resourcePath }}
             style={{
               height: 150,
               width: 150,
@@ -217,12 +220,12 @@ function Signup(props) {
           {/* <Text style={styles.buttonText}>Select File</Text> */}
         </TouchableOpacity>
         <Form>
-          <Item floatingLabel style={{marginEnd: 20}}>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Username</Label>
             <Input value={userName} onChangeText={(val) => setUserName(val)} />
           </Item>
 
-          <Text style={{marginStart: 20, fontSize: 16, marginTop: 10}}>
+          <Text style={{ marginStart: 20, fontSize: 16, marginTop: 10 }}>
             Gender
           </Text>
           <View
@@ -233,28 +236,28 @@ function Signup(props) {
               marginTop: 10,
             }}>
             <TouchableOpacity
-              style={{flexDirection: 'row'}}
+              style={{ flexDirection: 'row' }}
               onPress={() => {
                 setGenderRadio(true);
               }}>
               {RadioButton({
                 selected: genderRadio,
-                style: {borderColor: 'green'},
-                innerStyle: {backgroundColor: 'green'},
+                style: { borderColor: 'green' },
+                innerStyle: { backgroundColor: 'green' },
               })}
-              <Text style={{paddingLeft: 10, textAlignVertical: 'center'}}>
+              <Text style={{ paddingLeft: 10, textAlignVertical: 'center' }}>
                 Male
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{flexDirection: 'row'}}
+              style={{ flexDirection: 'row' }}
               onPress={() => setGenderRadio(false)}>
               {RadioButton({
                 selected: !genderRadio,
-                style: {borderColor: 'green'},
-                innerStyle: {backgroundColor: 'green'},
+                style: { borderColor: 'green' },
+                innerStyle: { backgroundColor: 'green' },
               })}
-              <Text style={{paddingLeft: 10, textAlignVertical: 'center'}}>
+              <Text style={{ paddingLeft: 10, textAlignVertical: 'center' }}>
                 Female
               </Text>
             </TouchableOpacity>
@@ -266,13 +269,13 @@ function Signup(props) {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Text style={{textAlignVertical: 'center'}}>
+            <Text style={{ textAlignVertical: 'center' }}>
               Please choose your Blood Group:
             </Text>
 
             <Picker
               selectedValue={bgSelected}
-              style={{height: 20, width: 150}}
+              style={{ height: 20, width: 150 }}
               onValueChange={(itemValue, itemIndex) => {
                 setBgSelected(itemValue);
                 console.log(itemValue);
@@ -303,7 +306,7 @@ function Signup(props) {
               <Radio selected={true} />
             </Right>
           </ListItem> */}
-          <Item floatingLabel style={{marginEnd: 20}}>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Email</Label>
             <Input
               value={userEmail}
@@ -311,14 +314,21 @@ function Signup(props) {
               onChangeText={(val) => setUserEmail(val)}
             />
           </Item>
-          <Item floatingLabel style={{marginEnd: 20}}>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Address</Label>
             <Input
               value={userAddress}
               onChangeText={(val) => setUserAddress(val)}
             />
           </Item>
-          <Item floatingLabel style={{marginEnd: 20}}>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
+            <Label>Phone #</Label>
+            <Input
+              value={phoneNo}
+              onChangeText={(val) => setPhoneNo(val)}
+            />
+          </Item>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Password</Label>
             <Input
               value={userPass}
@@ -333,7 +343,7 @@ function Signup(props) {
             />
           </Item>
           <Item
-            floatingLabel style={{marginEnd: 20}}
+            floatingLabel style={{ marginEnd: 20 }}
             error={confirmPass === '' ? false : passError ? true : false}
             // success={!passError? userPass===''?false: true : false}
             disabled={userPass === '' ? true : false}>
@@ -363,9 +373,9 @@ function Signup(props) {
           }}>
           - OR -
         </Text> */}
-        <View style={{marginStart: 15, marginTop: 20, flexDirection: 'row'}}>
+        <View style={{ marginStart: 15, marginTop: 20, flexDirection: 'row' }}>
           <CheckBox checked={donor} onPress={() => setDonor(!donor)} />
-          <Text style={{marginStart: 25}}>I want to be a Donor</Text>
+          <Text style={{ marginStart: 25 }}>I want to be a Donor</Text>
         </View>
 
         <Button
@@ -380,7 +390,7 @@ function Signup(props) {
           block
           disabled={props.disable ? true : false}>
           {/* <Icon name='home' /> */}
-          <Text style={{color: 'white'}}>Signup with Email</Text>
+          <Text style={{ color: 'white' }}>Signup with Email</Text>
         </Button>
       </View>
       {/* <View style={styles.container2}> */}

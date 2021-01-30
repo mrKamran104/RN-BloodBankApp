@@ -34,7 +34,7 @@ import DetailsScreen from './../DetailsScreen/index';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 
 function HomeScreen(props) {
-  const ImageUri = Image.resolveAssetSource(demo).uri;
+  // const ImageUri = Image.resolveAssetSource(demo).uri;
   const {navigation} = props;
 
   const [searchVal, setSearchVal] = useState('');
@@ -116,7 +116,7 @@ function HomeScreen(props) {
                     <CardItem>
                       {/* <Icon type="MaterialIcons" name="chevron-right" style={{ fontSize: 20, fontWeight: 'bold' }} /> */}
                       <Image
-                        source={{uri: ImageUri}}
+                        source={{uri: v.photo}}
                         style={{
                           height: 60,
                           width: 60,

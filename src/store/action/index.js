@@ -1,28 +1,29 @@
 // import ActionTypes from '../constant/constant';
 import { Alert } from 'react-native';
 import firebase from './firebase';
+import RNFetchBlob from 'react-native-fetch-blob'
 // import history from '../../history'
 
 // Initialize Firebase
-const uriToBlob = (uri) => {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      // return the blob
-      resolve(xhr.response);
-    };
-    
-    xhr.onerror = function() {
-      // something went wrong
-      reject(new Error('uriToBlob failed'));
-    };
-    // this helps us get a blob
-    xhr.responseType = 'blob';
-    xhr.open('GET', uri, true);
-    
-    xhr.send(null);
-  });
-}
+// const uriToBlob = (uri) => {
+//   return new Promise((resolve, reject) => {
+//     const xhr = new XMLHttpRequest();
+//     xhr.onload = function() {
+//       // return the blob
+//       resolve(xhr.response);
+//     };
+
+//     xhr.onerror = function() {
+//       // something went wrong
+//       reject(new Error('uriToBlob failed'));
+//     };
+//     // this helps us get a blob
+//     xhr.responseType = 'blob';
+//     xhr.open('GET', uri, true);
+
+//     xhr.send(null);
+//   });
+// }
 
 export function Logout(data) {
   return (dispatch) =>
@@ -47,38 +48,61 @@ export function SignupUser(user) {
     gender: user.gender,
     bloodGroup: user.bloodGroup,
     donor: user.donor,
+    phoneNo: user.phoneNo
   }
   // return dispatch => dispatch({type: "Login", payload: data})
   return (dispatch) => {
     return firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
-      .then(function (result) {
+      .then(async (result) => {
         create_user['uid'] = result.user.uid;
+        // RNFetchBlob.fs.readFile(user.photo, 'base64')
+        //   .then((data) => {
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function () {
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", user.photo, true);
+          xhr.send(null);
+        });
 
+        // handle the data ..
+        // console.log(data)
+        console.log(result.user.uid)
+        // let d = `data:image/*;base64,${data}`
+
+        // return 
+
+        const ref = firebase.storage().ref().child(`${result.user.uid}.${user.photo.substring(user.photo.lastIndexOf('.') + 1)}`)
+        let d = await ref.put(blob, { contentType: 'image/*' })
+        let url = await d.ref.getDownloadURL();
+        // .then(function (uploadImage) {
+        create_user['photo'] = url;
+        console.log("uploadImage", url)
         return firebase
-          .storage()
-          .ref().child(`images/${result.user.uid}.jpg`).put(user.photo, {contentType: 'image/jpeg'})
-          .then(function (uploadImage) {
-            // create_user['photo'] = ;
-            console.log("uploadImage", uploadImage)
-            // return firebase
-            //   .database()
-            //   .ref('/')
-            //   .child(`users/${result.user.uid}`)
-            //   .set(create_user)
-            //   .then(() => {
-            //     console.log('database', create_user);
-            // createTwoButtonAlert(
-            //   'Hurry',
-            //   'You are successfully signup,\n Click "Ok" to go Login screen',
-            //   user.func,
-            // );
-            //     dispatch({ type: 'SignupUser', payload: create_user });
-            //     // alert('user login successfully')
-            //     // history.push('/chat')
-            //   });
-          })
+          .database()
+          .ref('/')
+          .child(`users/${result.user.uid}`)
+          .set(create_user)
+          .then(() => {
+            console.log('database', create_user);
+            createTwoButtonAlert(
+              'Hurry',
+              'You are successfully signup,\n Click "Ok" to go Login screen',
+              user.func,
+            );
+            dispatch({ type: 'SignupUser', payload: create_user });
+            // alert('user login successfully')
+            // history.push('/chat')
+          });
+        // })
+        // })
       }).catch(function (error) {
         console.log(error);
         dispatch({
@@ -112,26 +136,26 @@ export function SigninUser(user) {
       .signInWithEmailAndPassword(user.email, user.password)
       .then(function (result) {
         console.log(result);
-        return firebase.storage.ref().child(`images/${result.user.uid}.jpg`).getDownloadURL()
-        .then(fireBaseUrl => {
-            console.log(fireBaseUrl)
-          //   return firebase
-          //     .database()
-          //     .ref('/')
-          //     .child(`users/${result.user.uid}`)
-          //     .once('value')
-          //     .then((data) => {
-          //       // this.state.chats.push(messages.val())
-          //       // this.setState({
-          //       //     chats: this.state.chats
-          //       // })
-          //       console.log(data.val().address);
-          //       dispatch({
-          //         type: 'SigninUser',
-          //         payload: { data: data.val(), login: user.login },
-          //       });
-          //     });
-          })
+        // return firebase.storage().ref().child(result.user.uid).getDownloadURL()
+        //   .then(fireBaseUrl => {
+        //     console.log(fireBaseUrl)
+        return firebase
+          .database()
+          .ref('/')
+          .child(`users/${result.user.uid}`)
+          .once('value')
+          .then((data) => {
+            // this.state.chats.push(messages.val())
+            // this.setState({
+            //     chats: this.state.chats
+            // })
+            console.log(data.val().address);
+            dispatch({
+              type: 'SigninUser',
+              payload: { data: data.val(), login: user.login },
+            });
+          });
+        // })
       })
       .catch(function (error) {
         // console.log(`${error}`);
@@ -157,12 +181,29 @@ export function updateProfile(user) {
     gender: user.gender,
     bloodGroup: user.bloodGroup,
     donor: user.donor,
+    phoneNo: user.phoneNo
   };
 
-  return (dispatch) => {
-    firebase
-      .database()
-      .ref('/')
+  return async (dispatch) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", user.photo, true);
+      xhr.send(null);
+    });
+
+    const ref = firebase.storage().ref().child(`${user.uid}.${user.photo.substring(user.photo.lastIndexOf('.') + 1)}`)
+    let d = await ref.put(blob, { contentType: 'image/*' })
+    let url = await d.ref.getDownloadURL();
+    update_user['photo'] = url
+
+    return firebase.database().ref('/')
       .child(`users/${user.uid}`)
       .update(update_user)
       .then(() => {
@@ -171,7 +212,7 @@ export function updateProfile(user) {
         // alert('user login successfully')
         // history.push('/chat')
       });
-  };
+  }
 }
 
 // const facebook_login = (history) => {
@@ -232,6 +273,8 @@ export const GetDonor = (Blood) => {
             donor: child.val().donor,
             gender: child.val().gender,
             uid: child.val().uid,
+            photo: child.val().photo,
+            phoneNo: child.val().phoneNo
           });
         });
         dispatch({
