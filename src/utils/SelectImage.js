@@ -1,28 +1,4 @@
 import ImagePicker from 'react-native-image-crop-picker';
-import {Image} from 'react-native';
-import demo from '../assets/demo.png';
-
-// const ImageUri = Image.resolveAssetSource(demo).uri;
-
-// const uriToBlob = (uri) => {
-//   return new Promise((resolve, reject) => {
-//     const xhr = new XMLHttpRequest();
-//     xhr.onload = function() {
-//       // return the blob
-//       resolve(xhr.response);
-//     };
-    
-//     xhr.onerror = function() {
-//       // something went wrong
-//       reject(new Error('uriToBlob failed'));
-//     };
-//     // this helps us get a blob
-//     xhr.responseType = 'blob';
-//     xhr.open('GET', uri, true);
-    
-//     xhr.send(null);
-//   });
-// }
 
 export const openGallery = async (resourcePath) => {
   let d;
@@ -42,7 +18,7 @@ export const openGallery = async (resourcePath) => {
     .catch((e) => {
       d = resourcePath;
     });
-    
+
   return d;
 };
 export const openCamera = async (resourcePath) => {

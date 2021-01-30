@@ -3,7 +3,6 @@ const INITIAL_STATE = {
   userName: '',
   address: '',
   uid: '',
-  // password: "",
   login: false,
   disable: false,
   photo: '',
@@ -28,7 +27,7 @@ export default globalData = (state = INITIAL_STATE, action) => {
         getDonors: action.payload,
       };
     case 'SignupUser':
-      console.log('signup', action);
+      // console.log('signup', action);
       // break
       return {
         ...state,
@@ -43,7 +42,7 @@ export default globalData = (state = INITIAL_STATE, action) => {
         phoneNo: action.payload.phoneNo
       };
     case 'SigninUser':
-      console.log('signin', action);
+      // console.log('signin', action);
       // break
       return {
         ...state,
@@ -59,7 +58,7 @@ export default globalData = (state = INITIAL_STATE, action) => {
         phoneNo: action.payload.data.phoneNo
       };
     case 'updateProfile':
-      console.log('update', action);
+      // console.log('update', action);
       // break
       return {
         ...state,
@@ -67,28 +66,19 @@ export default globalData = (state = INITIAL_STATE, action) => {
         userName: action.payload.name,
         address: action.payload.address,
         gender: action.payload.gender,
-        // login: action.payload.login,
         uid: action.payload.uid,
         bloodGroup: action.payload.bloodGroup,
         donor: action.payload.donor,
         phoneNo: action.payload.phoneNo
       };
     case 'Logout':
-      // console.log(action)
+      // console.log("Logout",action)
       // break;
       return {
         ...state,
         login: action.payload.login,
         disable: false,
-        // userName: action.payload.userName,
-        // password: action.payload.password,
       };
-    // case ActionTypes.SignOut:
-    // return ({
-    //     ...state,
-    //     userName: "",
-    //     password: ""
-    // })
     default:
       return state;
   }

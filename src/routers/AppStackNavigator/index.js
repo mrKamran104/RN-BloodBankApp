@@ -12,25 +12,16 @@
           style={{
     borderRadius: this.state.borderRadius,
 */
-import { Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import {
-    Icon,
-} from 'native-base';
-import Feather from 'react-native-vector-icons/Feather';
-import {
-  Button,
-} from 'native-base';
-import * as React from 'react';
-import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { Button, Icon } from 'native-base';
+import * as React from 'react';
+import Animated from 'react-native-reanimated';
+import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import DetailsScreen from '../../screens/DetailsScreen';
 import HomeScreen from '../../screens/HomeScreen';
-import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
-import Animated from 'react-native-reanimated';
 import AboutScreen from './../../screens/AboutScreen';
 import ProfileScreen from './../../screens/ProfileScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -130,9 +121,9 @@ const AppStackNavigator = (props) => {
               name="Home"
               component={HomeScreen}
               options={{
-                headerLeft: () => 
-                <Button onPress={() => navigation.openDrawer()} transparent>
-                  <Icon type='MaterialIcons' name="menu" style={{color: 'black', fontSize: 24}} /></Button>
+                headerLeft: () =>
+                  <Button onPress={() => navigation.openDrawer()} transparent>
+                    <Icon type='MaterialIcons' name="menu" style={{ color: 'black', fontSize: 24 }} /></Button>
               }}
             // options={({ login }) => ({ login: route.params.login })}
             // options={
@@ -150,7 +141,8 @@ const AppStackNavigator = (props) => {
             <Stack.Screen name="Profile" component={ProfileScreen}
               options={{
                 headerLeft: () => <Button onPress={() => navigation.openDrawer()} transparent>
-                <Icon type='MaterialIcons' name="menu" style={{color: 'black', fontSize: 24}} /></Button>}} />
+                  <Icon type='MaterialIcons' name="menu" style={{ color: 'black', fontSize: 24 }} /></Button>
+              }} />
           </Stack.Navigator>
         </Animated.View>
       </Animated.View>

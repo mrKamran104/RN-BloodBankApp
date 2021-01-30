@@ -1,38 +1,20 @@
+import {
+  ActionSheet, Button,
+  CheckBox, Form,
+  Icon, Input, Item,
+  Label
+} from 'native-base';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Alert,
-  Switch,
-  ImageBackground,
-  ScrollView,
+  Alert, Dimensions,
   Image,
-  Picker,
+  Picker, ScrollView, StyleSheet, Text, View
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
-// import ImagePicker from 'react-native-image-crop-picker';
-import { openCamera, openGallery } from '../../utils/SelectImage';
-import { Login } from '../../store/action';
-import { SignupUser, Disable } from '../../store/action';
-import {
-  Container,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  ListItem,
-  Icon,
-  Button,
-  Radio,
-  CheckBox,
-  ActionSheet,
-} from 'native-base';
 import demo from '../../assets/demo.png';
+import { Disable, Login, SignupUser } from '../../store/action';
+import { openCamera, openGallery } from '../../utils/SelectImage';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 var BUTTONS = [
@@ -48,12 +30,10 @@ function Signup(props) {
   const ImageUri = Image.resolveAssetSource(demo).uri;
   // console.log(ImageUri)
 
-  // const [login, setLogin] = useState(false)
   const { navigation } = props;
   const [userName, setUserName] = useState('');
   const [userPass, setUserPass] = useState('');
   const [genderRadio, setGenderRadio] = useState(true);
-  // const [genderValue, setGenderValue] = useState('Male');
   const [userAddress, setUserAddress] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -138,19 +118,6 @@ function Signup(props) {
       setPassError(false);
     }
   };
-
-  //   const openCamera = () => {
-  //     ImagePicker.openPicker({
-  //         // width: 300,
-  //         // height: 400,
-  //         // cropping: true,
-  //         mediaType: 'any',
-
-  //     }).then(image => {
-  //         console.log(image);
-  //         setResourcePath(image.path);
-  //     });
-  // }
 
   const createTwoButtonAlert = (title, msg, func) =>
     Alert.alert(
@@ -290,22 +257,7 @@ function Signup(props) {
               <Picker.Item label="O-" value="O-" />
             </Picker>
           </View>
-          {/* <ListItem>
-            <Left>
-            <Text>Daily Stand Up</Text>
-            </Left>
-            <Right>
-              <Radio selected={false} />
-            </Right>
-          </ListItem>
-          <ListItem>
-            <Left>
-              <Text>Discussion with Client</Text>
-            </Left>
-            <Right>
-              <Radio selected={true} />
-            </Right>
-          </ListItem> */}
+
           <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Email</Label>
             <Input
@@ -355,24 +307,8 @@ function Signup(props) {
               onChangeText={(val) => matchConfirmPassword(val)}
             />
           </Item>
-          {/* {error && (
-            <Alert severity="error" onClick={() => setError(null)}>
-              {error}
-              </Alert>
-            )} */}
-
-          {/* <Button style={{marginTop: 50}} onPress={() => props.Login(true)} title="Login" /> */}
+          
         </Form>
-        {/* <Text
-          style={{
-            marginTop: 25,
-            marginBottom: 25,
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 20,
-          }}>
-          - OR -
-        </Text> */}
         <View style={{ marginStart: 15, marginTop: 20, flexDirection: 'row' }}>
           <CheckBox checked={donor} onPress={() => setDonor(!donor)} />
           <Text style={{ marginStart: 25 }}>I want to be a Donor</Text>
@@ -393,25 +329,10 @@ function Signup(props) {
           <Text style={{ color: 'white' }}>Signup with Email</Text>
         </Button>
       </View>
-      {/* <View style={styles.container2}> */}
-      {/* </View> */}
-      {/* </View> */}
-
-      {/* <TouchableOpacity
-        onPress={()=>console.log("kk")}
-        style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
-        <Text style={{ color: 'white' }}>Login</Text>
-      </TouchableOpacity> */}
-
-      {/* <TouchableOpacity
-        onPress={() => navigation.navigate('Home', {login: {login}})}
-        style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
-        <Text style={{ color: 'white' }}>Go to Home</Text>
-      </TouchableOpacity> */}
     </ScrollView>
   );
 }
-// backgroundColor: '#ffffff'
+
 const styles = StyleSheet.create({
   container: {
     width: WIDTH,
@@ -427,27 +348,12 @@ const styles = StyleSheet.create({
   },
   container2: {
     width: WIDTH,
-    // bottom: 50,
-    // backgroundColor: 'white',
     paddingTop: 25,
     paddingBottom: 30,
-    // position: 'absolute',
-    // zIndex: 2,
-    // left: 0,
-    // bottom: 0,
-    // flex: 0.3,
-    // flex: 0.3,
-    // borderWidth: 5,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
   },
   backButton: {
-    // color: 'white',
     position: 'absolute',
     top: 5,
-    // left: 15,
-    // backgroundColor: '',
-    // fontSize: 20,
   },
   boder: {
     borderTopRightRadius: 80,
@@ -456,7 +362,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   image: {
-    // flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
   },

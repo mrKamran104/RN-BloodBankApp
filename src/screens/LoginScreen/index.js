@@ -1,39 +1,24 @@
-import React, {useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Alert,
-  Switch,
-  ScrollView,
-  ImageBackground,
-} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {connect} from 'react-redux';
-import {SigninUser, Disable} from '../../store/action';
-import Signup from '../Signup';
-import {
-  Container,
-  Header,
-  Content,
-  Form,
-  Icon,
-  Item,
-  Input,
-  Label,
-  Button,
+  Button, Form,Icon,
+  Input, Item,
+  Label
 } from 'native-base';
+import React, { useState } from 'react';
+import {
+  Alert, Dimensions,
+  ImageBackground, ScrollView, StyleSheet, Text, View
+} from 'react-native';
+import { connect } from 'react-redux';
+import { Disable, SigninUser } from '../../store/action';
 
-const image = {uri: 'https://reactjs.org/logo-og.png'};
-const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+const image = { uri: 'https://reactjs.org/logo-og.png' };
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
+
 function LoginScreen(props) {
   // const [login, setLogin] = useState(false)
-  const {navigation, route} = props;
-
+  const { navigation, route } = props;
   const [userEmail, setUserEmail] = useState('');
   const [userPass, setUserPass] = useState('');
-  const [error, setError] = useState(props.error);
   const [hidePass, setHidePass] = useState(true);
   // const [disable, setDisable] = useState(false)
 
@@ -53,7 +38,7 @@ function LoginScreen(props) {
       return;
     }
     props.Disable(true);
-    props.SigninUser({login: true, email: userEmail, password: userPass});
+    props.SigninUser({ login: true, email: userEmail, password: userPass });
     // setDisable(true)
   };
 
@@ -85,9 +70,9 @@ function LoginScreen(props) {
         //   onPress: () => console.log("Cancel Pressed"),
         //   style: "cancel"
         // },
-        {text: 'OK', onPress: func},
+        { text: 'OK', onPress: func },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   // console.log(props.login, userEmail, userPass);
   return (
@@ -108,7 +93,7 @@ function LoginScreen(props) {
       {/* <View> */}
       <View style={styles.container}>
         <Form>
-          <Item floatingLabel style={{marginEnd: 20}}>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Email</Label>
             <Input
               value={userEmail}
@@ -116,7 +101,7 @@ function LoginScreen(props) {
             />
           </Item>
           {/* <View> */}
-          <Item floatingLabel style={{marginEnd: 20}}>
+          <Item floatingLabel style={{ marginEnd: 20 }}>
             <Label>Password</Label>
             <Input
               value={userPass}
@@ -143,7 +128,7 @@ function LoginScreen(props) {
             block
             disabled={props.disable ? true : false}>
             {/* <Icon name='home' /> */}
-            <Text style={{color: 'white'}}>Signin with Email</Text>
+            <Text style={{ color: 'white' }}>Signin with Email</Text>
           </Button>
           {/* {error && (
             <Alert severity="error" onClick={() => setError(null)}>
@@ -163,15 +148,15 @@ function LoginScreen(props) {
           }}>
           - OR -
         </Text>
-        <View style={{paddingBottom: 50}}>
+        <View style={{ paddingBottom: 50 }}>
           <Button
-            style={{marginEnd: 30, marginStart: 30}}
+            style={{ marginEnd: 30, marginStart: 30 }}
             onPress={() => navigation.navigate('Signup')}
             iconLeft
             block
             disabled={props.disable ? true : false}>
             {/* <Icon name='home' /> */}
-            <Text style={{color: 'white'}}>Signup with Email</Text>
+            <Text style={{ color: 'white' }}>Signup with Email</Text>
           </Button>
           <Button
             style={{
@@ -185,36 +170,23 @@ function LoginScreen(props) {
             block
             disabled>
             {/* <Icon name='home' /> */}
-            <Text style={{color: 'white'}}>Signin with Gmail</Text>
+            <Text style={{ color: 'white' }}>Signin with Gmail</Text>
           </Button>
           <Button
-            style={{marginTop: 20, marginEnd: 30, marginStart: 30}}
+            style={{ marginTop: 20, marginEnd: 30, marginStart: 30 }}
             onPress={signinwithfb}
             iconLeft
             block
             disabled>
             {/* <Icon name='home' /> */}
-            <Text style={{color: 'white'}}>Signin with Facebook</Text>
+            <Text style={{ color: 'white' }}>Signin with Facebook</Text>
           </Button>
         </View>
       </View>
-      {/* </View> */}
-
-      {/* <TouchableOpacity
-        onPress={()=>console.log("kk")}
-        style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
-        <Text style={{ color: 'white' }}>Login</Text>
-      </TouchableOpacity> */}
-
-      {/* <TouchableOpacity
-        onPress={() => navigation.navigate('Home', {login: {login}})}
-        style={{ backgroundColor: 'blue', padding: 8, borderRadius: 4 }}>
-        <Text style={{ color: 'white' }}>Go to Home</Text>
-      </TouchableOpacity> */}
     </ScrollView>
   );
 }
-// backgroundColor: '#ffffff'
+
 const styles = StyleSheet.create({
   container: {
     width: WIDTH,

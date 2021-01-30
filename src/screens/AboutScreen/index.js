@@ -1,8 +1,8 @@
+import { Icon } from 'native-base';
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import demo from '../../assets/demo.png';
-import {Icon} from 'native-base';
 
 export default function AboutScreen(props) {
   const ImageUri = Image.resolveAssetSource(demo).uri;
@@ -16,7 +16,7 @@ export default function AboutScreen(props) {
         backgroundColor: 'white',
       }}>
       <Text style={{ fontSize: 35, fontWeight: 'bold' }}>Blood Bank</Text>
-      <Text style={{color: 'gray'}}>Version 1.0</Text>
+      <Text style={{ color: 'gray' }}>Version 1.0</Text>
       <View style={{ marginTop: 30 }}>
         <Image source={{ uri: ImageUri }}
           style={{
@@ -33,7 +33,7 @@ export default function AboutScreen(props) {
         onPress={() => navigation.openDrawer()}
         style={{ marginTop: 100, marginBottom: 10, backgroundColor: '#14151f', shadowColor: 'black', elevation: 20, width: 60, height: 60, borderRadius: 60 }}>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Icon type="Ionicons" name="arrow-back" style={{color: 'white'}}/>
+          <Icon type="Ionicons" name="arrow-back" style={{ color: 'white' }} />
         </View>
       </TouchableOpacity>
     </View>

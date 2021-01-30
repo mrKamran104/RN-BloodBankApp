@@ -7,8 +7,6 @@ import AppStackNavigator from '../AppStackNavigator';
 import { SafeAreaView, Text, View } from 'react-native';
 import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import Animated from 'react-native-reanimated';
-import CustomDrawerItem from '../../components/CustomDrawerItem';
-import AboutScreen from './../../screens/AboutScreen/index';
 const Drawer = createDrawerNavigator();
 
 const AppDrawerNavigator = () => {
@@ -106,7 +104,7 @@ const AppDrawerNavigator = () => {
         </Drawer.Navigator>
       </View>
 
-      
+
     </>
   );
 };

@@ -1,17 +1,13 @@
-import React, { useContext, useEffect } from 'react';
 import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-  // DrawerItemList,
+  DrawerContentScrollView
 } from '@react-navigation/drawer';
-import { Text, View, SafeAreaView } from 'react-native';
-import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
+import React, { useContext, useEffect } from 'react';
+import { SafeAreaView, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import CustomDrawerItem from '../../components/CustomDrawerItem';
 import { connect } from 'react-redux';
+import CustomDrawerItem from '../../components/CustomDrawerItem';
+import { DrawerAnimationContext } from '../../contexts/DrawerAnimationContext';
 import { Logout } from '../../store/action';
-import LoginScreen from './../../screens/LoginScreen/index';
 
 const CustomDrawerContent = (props) => {
   const { progress, navigation } = props;
@@ -142,10 +138,10 @@ const CustomDrawerContent = (props) => {
           <CustomDrawerItem
             title={`Log Out`}
             icon={{ name: 'settings-sharp', type: 'Ionicons' }}
-            onPress={()=> props.Logout(false)}
+            onPress={() => props.Logout(false)}
           />
-          
-          
+
+
           {/* <View
             style={{
               height: 40,
@@ -171,7 +167,7 @@ const CustomDrawerContent = (props) => {
 
 function mapStateToProp(state) {
   return ({
-      login: state.root.login
+    login: state.root.login
   })
 }
 function mapDispatchToProp(dispatch) {

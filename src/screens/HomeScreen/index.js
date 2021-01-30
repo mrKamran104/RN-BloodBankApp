@@ -1,47 +1,25 @@
-import React, {useState} from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Image,
-  Picker,
-} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import Header from './../../Header/index';
-import {GetDonor} from '../../store/action';
-import {connect} from 'react-redux';
-import {
-  Form,
-  Item,
-  Input,
-  Label,
-  ListItem,
-  //   Icon,
-  CardItem,
   Card,
-  Right,
-  Button,
-  Radio,
-  CheckBox,
-  ActionSheet,
+  CardItem,
+  Right
 } from 'native-base';
-import demo from '../../assets/demo.png';
-import DetailsScreen from './../DetailsScreen/index';
+import React, { useState } from 'react';
+import {
+  Dimensions,
+  Image,
+  Picker, ScrollView, StyleSheet, Text, View
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { GetDonor } from '../../store/action';
 
-const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 function HomeScreen(props) {
-  // const ImageUri = Image.resolveAssetSource(demo).uri;
-  const {navigation} = props;
 
+  const { navigation } = props;
   const [searchVal, setSearchVal] = useState('');
-  // const [resourcePath, setResourcePath] = useState(ImageUri);
-  // console.log("gh",searchVal)
 
-  // console.log(props.getDonors);
   return (
     <View
       style={{
@@ -56,7 +34,7 @@ function HomeScreen(props) {
           marginHorizontal: 15,
           marginTop: 15,
         }}>
-        <Text style={{textAlignVertical: 'center'}}>
+        <Text style={{ textAlignVertical: 'center' }}>
           Please choose Blood Group:
         </Text>
         <View
@@ -67,7 +45,7 @@ function HomeScreen(props) {
           }}>
           <Picker
             selectedValue={searchVal}
-            style={{height: 20, width: 150}}
+            style={{ height: 20, width: 150 }}
             onValueChange={(itemValue, itemIndex) => {
               itemValue === '' ? null : setSearchVal(itemValue);
               itemValue === '' ? null : console.log(itemValue);
@@ -83,14 +61,14 @@ function HomeScreen(props) {
             <Picker.Item label="O-" value="O-" />
           </Picker>
           <TouchableOpacity
-            onPress={() => props.GetDonor({Group: searchVal})}
+            onPress={() => props.GetDonor({ Group: searchVal })}
             style={{
               backgroundColor: 'green',
               padding: 8,
               borderRadius: 4,
               // marginTop: 20,
             }}>
-            <Text style={{color: 'white'}}>Get Donor</Text>
+            <Text style={{ color: 'white' }}>Get Donor</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -105,45 +83,45 @@ function HomeScreen(props) {
     />*/}
 
       {/* </View>  */}
-      <ScrollView style={{marginTop: 25, marginBottom: 55}}>
+      <ScrollView style={{ marginTop: 25, marginBottom: 55 }}>
         {props.getDonors?.map((v, i) => {
           return (
-            props.uid === v.uid? null:
-            v.donor ? (
-              <View style={{alignItems: 'center'}} key={i}>
-                <Card style={{width: WIDTH - 20}}>
-                  <TouchableOpacity onPress={() => {navigation.navigate('Details', {params: {select: v}})}}>
-                    <CardItem>
-                      {/* <Icon type="MaterialIcons" name="chevron-right" style={{ fontSize: 20, fontWeight: 'bold' }} /> */}
-                      <Image
-                        source={{uri: v.photo}}
-                        style={{
-                          height: 60,
-                          width: 60,
-                          marginRight: 10,
-                          resizeMode: 'contain',
-                          alignSelf: 'center',
-                        }}
-                      />
-                      <View>
-                        <Text>{v.name}</Text>
-                        <Text>{v.address}</Text>
-                      </View>
-                      <Right>
-                        <View style={{alignItems: 'flex-start'}}>
-                          <Text>{v.bloodGroup}</Text>
-                          <Text>{v.gender ? 'Male' : 'Female'}</Text>
+            props.uid === v.uid ? null :
+              v.donor ? (
+                <View style={{ alignItems: 'center' }} key={i}>
+                  <Card style={{ width: WIDTH - 20 }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('Details', { params: { select: v } }) }}>
+                      <CardItem>
+                        {/* <Icon type="MaterialIcons" name="chevron-right" style={{ fontSize: 20, fontWeight: 'bold' }} /> */}
+                        <Image
+                          source={{ uri: v.photo }}
+                          style={{
+                            height: 60,
+                            width: 60,
+                            marginRight: 10,
+                            resizeMode: 'contain',
+                            alignSelf: 'center',
+                          }}
+                        />
+                        <View>
+                          <Text>{v.name}</Text>
+                          <Text>{v.address}</Text>
                         </View>
-                      </Right>
-                      {/* <Right style={{ position: 'absolute', right: 15, flexDirection: 'row', flexWrap: 'wrap', }}>
+                        <Right>
+                          <View style={{ alignItems: 'flex-start' }}>
+                            <Text>{v.bloodGroup}</Text>
+                            <Text>{v.gender ? 'Male' : 'Female'}</Text>
+                          </View>
+                        </Right>
+                        {/* <Right style={{ position: 'absolute', right: 15, flexDirection: 'row', flexWrap: 'wrap', }}>
                                             <Icon type="MaterialIcons" name="edit" style={{ fontSize: 35, color: 'green', marginRight: 10 }} onPress={() => editTodo(v, i)} />
                                             <Icon type="MaterialIcons" name="delete-forever" style={{ fontSize: 35, color: 'red', }} onPress={() => delTodo(i)} />
                                           </Right> */}
-                    </CardItem>
-                  </TouchableOpacity>
-                </Card>
-              </View>
-            ) : null
+                      </CardItem>
+                    </TouchableOpacity>
+                  </Card>
+                </View>
+              ) : null
           );
         })}
       </ScrollView>
@@ -152,7 +130,7 @@ function HomeScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {width: WIDTH, backgroundColor: '#ffffff'},
+  container: { width: WIDTH, backgroundColor: '#ffffff' },
   contentContainer: {
     backgroundColor: '#f6f6f6',
     flex: 1,
